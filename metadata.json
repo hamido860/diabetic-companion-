@@ -1,0 +1,7 @@
+{
+  "name": "Diabetic Companion 2",
+  "description": "A trusted, delightful diabetic companion that goes beyond logging — it predicts, coaches, and protects users. It provides actionable, personalized glucose insights, an AI coach, and accurate nutrition data.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
