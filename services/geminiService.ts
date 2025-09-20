@@ -60,7 +60,6 @@ export const analyzeMealImage = async (imageFile: File): Promise<any> => {
                         description: 'Confidence level of the estimation: High, Medium, or Low.'
                     }
                 },
-                // FIX: Corrected typo in schema definition. 'required' is a property, not a peer of 'properties'.
                 required: ['recipeName', 'carbohydrates', 'protein', 'fats', 'calories', 'confidence']
             }
         }
@@ -140,6 +139,98 @@ export const getFoodNutritionInfo = async (foodName: string): Promise<any> => {
   }
 };
 
+// Helper to extract ingredients from a recipe object
+const getIngredients = (recipe: Recipe): string[] => {
+  const ingredients: string[] = [];
+  for (let i = 1; i <= 20; i++) {
+    const ingredient = recipe[`strIngredient${i}`];
+    const measure = recipe[`strMeasure${i}`];
+    if (ingredient && ingredient.trim() !== '') {
+      ingredients.push(`${measure ? measure.trim() : ''} ${ingredient.trim()}`.trim());
+    }
+  }
+  return ingredients;
+};
+
+export const translateRecipe = async (recipe: Recipe, language: string): Promise<{ strMeal: string; strInstructions: string; ingredients: string[] }> => {
+    const ingredients = getIngredients(recipe).join('\n');
+    const prompt = `Translate the following recipe to ${language}. Provide the response in JSON.
+    
+    Recipe Title: ${recipe.strMeal}
+    
+    Instructions:
+    ${recipe.strInstructions}
+    
+    Ingredients:
+    ${ingredients}
+    `;
+
+    try {
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+                responseMimeType: 'application/json',
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        strMeal: { type: Type.STRING, description: 'Translated recipe title' },
+                        strInstructions: { type: Type.STRING, description: 'Translated cooking instructions' },
+                        ingredients: {
+                            type: Type.ARRAY,
+                            items: { type: Type.STRING },
+                            description: 'List of translated ingredients with measures'
+                        }
+                    },
+                    required: ['strMeal', 'strInstructions', 'ingredients']
+                }
+            }
+        });
+
+        const jsonText = response.text.trim();
+        return JSON.parse(jsonText);
+    } catch (error) {
+        console.error(`Error translating recipe to ${language}:`, error);
+        throw new Error(`Failed to translate recipe. Please try again.`);
+    }
+};
+
+export const analyzeRecipeNutrition = async (recipe: Recipe): Promise<RecipeNutrition> => {
+    const ingredients = getIngredients(recipe).join(', ');
+    const prompt = `Analyze the nutritional content for the entire dish of the following recipe. Provide the total estimated carbohydrates, protein, fats, and calories in JSON format.
+    
+    Recipe: ${recipe.strMeal}
+    Ingredients: ${ingredients}
+    `;
+
+    try {
+        const response: GenerateContentResponse = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+                responseMimeType: 'application/json',
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        carbohydrates: { type: Type.NUMBER, description: 'Total carbohydrates in grams for the whole dish.' },
+                        protein: { type: Type.NUMBER, description: 'Total protein in grams for the whole dish.' },
+                        fats: { type: Type.NUMBER, description: 'Total fats in grams for the whole dish.' },
+                        calories: { type: Type.NUMBER, description: 'Total calories for the whole dish.' }
+                    },
+                    required: ['carbohydrates', 'protein', 'fats', 'calories']
+                }
+            }
+        });
+        
+        const jsonText = response.text.trim();
+        return JSON.parse(jsonText);
+    } catch (error) {
+        console.error(`Error analyzing nutrition for recipe "${recipe.strMeal}":`, error);
+        throw new Error(`Failed to analyze nutrition for "${recipe.strMeal}".`);
+    }
+};
+
+
 let chatInstance: Chat | null = null;
 
 export const getChat = (): Chat => {
@@ -163,5 +254,3 @@ export const getChat = (): Chat => {
     }
     return chatInstance;
 };
-
-// Helper to extract
