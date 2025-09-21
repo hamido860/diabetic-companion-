@@ -1,11 +1,17 @@
 import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import { Recipe, RecipeNutrition } from '../types';
 
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable is not set");
+// Initialize ai lazily or handle checks inside functions
+let ai: GoogleGenAI | null = null;
+if (process.env.API_KEY) {
+    ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const checkApiKey = () => {
+    if (!ai) {
+        throw new Error("API Key is not configured. Please set the API_KEY environment variable to use this feature.");
+    }
+};
 
 // Utility to convert file to base64
 const fileToGenerativePart = async (file: File) => {
@@ -20,9 +26,10 @@ const fileToGenerativePart = async (file: File) => {
 };
 
 export const analyzeMealImage = async (imageFile: File): Promise<any> => {
+  checkApiKey();
   try {
     const imagePart = await fileToGenerativePart(imageFile);
-    const response: GenerateContentResponse = await ai.models.generateContent({
+    const response: GenerateContentResponse = await ai!.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: {
             parts: [
@@ -70,13 +77,17 @@ export const analyzeMealImage = async (imageFile: File): Promise<any> => {
 
   } catch (error) {
     console.error("Error analyzing meal image:", error);
+    if (error instanceof Error && error.message.includes("API Key")) {
+        throw error;
+    }
     throw new Error("Failed to analyze image. Please try again.");
   }
 };
 
 export const getFoodNutritionInfo = async (foodName: string): Promise<any> => {
+  checkApiKey();
   try {
-    const response: GenerateContentResponse = await ai.models.generateContent({
+    const response: GenerateContentResponse = await ai!.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: `Provide a nutritional analysis for "${foodName}", focusing on information relevant to a person managing diabetes. Use the provided JSON schema for the response format.`,
         config: {
@@ -135,6 +146,9 @@ export const getFoodNutritionInfo = async (foodName: string): Promise<any> => {
 
   } catch (error) {
     console.error(`Error analyzing food "${foodName}":`, error);
+     if (error instanceof Error && error.message.includes("API Key")) {
+        throw error;
+    }
     throw new Error(`Failed to analyze "${foodName}". Please try a different food or check your connection.`);
   }
 };
@@ -153,6 +167,7 @@ const getIngredients = (recipe: Recipe): string[] => {
 };
 
 export const translateRecipe = async (recipe: Recipe, language: string): Promise<{ strMeal: string; strInstructions: string; ingredients: string[] }> => {
+    checkApiKey();
     const ingredients = getIngredients(recipe).join('\n');
     const prompt = `Translate the following recipe to ${language}. Provide the response in JSON.
     
@@ -166,7 +181,7 @@ export const translateRecipe = async (recipe: Recipe, language: string): Promise
     `;
 
     try {
-        const response = await ai.models.generateContent({
+        const response = await ai!.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
@@ -191,11 +206,15 @@ export const translateRecipe = async (recipe: Recipe, language: string): Promise
         return JSON.parse(jsonText);
     } catch (error) {
         console.error(`Error translating recipe to ${language}:`, error);
+         if (error instanceof Error && error.message.includes("API Key")) {
+            throw error;
+        }
         throw new Error(`Failed to translate recipe. Please try again.`);
     }
 };
 
 export const analyzeRecipeNutrition = async (recipe: Recipe): Promise<RecipeNutrition> => {
+    checkApiKey();
     const ingredients = getIngredients(recipe).join(', ');
     const prompt = `Analyze the nutritional content for the entire dish of the following recipe. Provide the total estimated carbohydrates, protein, fats, and calories in JSON format.
     
@@ -204,7 +223,7 @@ export const analyzeRecipeNutrition = async (recipe: Recipe): Promise<RecipeNutr
     `;
 
     try {
-        const response: GenerateContentResponse = await ai.models.generateContent({
+        const response: GenerateContentResponse = await ai!.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
@@ -226,6 +245,9 @@ export const analyzeRecipeNutrition = async (recipe: Recipe): Promise<RecipeNutr
         return JSON.parse(jsonText);
     } catch (error) {
         console.error(`Error analyzing nutrition for recipe "${recipe.strMeal}":`, error);
+         if (error instanceof Error && error.message.includes("API Key")) {
+            throw error;
+        }
         throw new Error(`Failed to analyze nutrition for "${recipe.strMeal}".`);
     }
 };
