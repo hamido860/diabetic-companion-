@@ -1,11 +1,11 @@
 import { GoogleGenAI, Type, GenerateContentResponse, Chat } from "@google/genai";
 import { Recipe, RecipeNutrition } from '../types';
 
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable is not set");
+if (!import.meta.env.VITE_API_KEY) {
+    throw new Error("VITE_API_KEY environment variable is not set");
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
 
 // Utility to convert file to base64
 const fileToGenerativePart = async (file: File) => {
