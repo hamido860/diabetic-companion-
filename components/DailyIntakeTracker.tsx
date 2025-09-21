@@ -16,10 +16,10 @@ const NutrientProgress: React.FC<{ label: string; value: number; goal: number; I
     const percentage = goal > 0 ? Math.min((value / goal) * 100, 100) : 0;
     
     const colorStylesMap: { [key: string]: { text: string, bg: string } } = {
-        teal: { text: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500' },
-        blue: { text: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500' },
-        yellow: { text: 'text-yellow-500 dark:text-yellow-400', bg: 'bg-yellow-400' },
-        orange: { text: 'text-orange-500 dark:text-orange-400', bg: 'bg-orange-500' },
+        teal: { text: 'text-brand-yellow', bg: 'bg-brand-yellow' },
+        blue: { text: 'text-blue-400', bg: 'bg-blue-500' },
+        yellow: { text: 'text-yellow-400', bg: 'bg-yellow-400' },
+        orange: { text: 'text-orange-400', bg: 'bg-orange-500' },
     };
 
     const styles = colorStylesMap[color];
@@ -32,9 +32,9 @@ const NutrientProgress: React.FC<{ label: string; value: number; goal: number; I
                     <Icon className={`w-5 h-5 ${styles.text}`} />
                     <span className={`font-semibold ${styles.text}`}>{label}</span>
                 </div>
-                <span className="font-semibold text-gray-500 dark:text-gray-400">{Math.round(value)}{unit} / {goal}{unit}</span>
+                <span className="font-semibold text-brand-beige/80">{Math.round(value)}{unit} / {goal}{unit}</span>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div className="w-full bg-brand-dark rounded-full h-2">
                 <div className={`${styles.bg} h-2 rounded-full transition-all duration-300`} style={{ width: `${percentage}%` }}></div>
             </div>
         </div>
@@ -68,8 +68,8 @@ const DailyIntakeTracker: React.FC = () => {
     if (!intake) {
         return (
             <div>
-                <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3">{t('todaysIntake')}</h2>
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 h-48 animate-pulse"></div>
+                <h2 className="text-xl font-bold text-brand-offwhite mb-3">{t('todaysIntake')}</h2>
+                <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 h-48 animate-pulse"></div>
             </div>
         );
     }
@@ -79,17 +79,17 @@ const DailyIntakeTracker: React.FC = () => {
     return (
         <div>
             <div className="flex justify-between items-center mb-3">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{t('todaysIntake')}</h2>
+                <h2 className="text-xl font-bold text-brand-offwhite">{t('todaysIntake')}</h2>
                 {loggedItems.length > 0 && (
                      <button 
                         onClick={() => setIsExpanded(!isExpanded)}
-                        className="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:underline"
+                        className="text-sm font-semibold text-brand-yellow hover:underline"
                     >
                         {isExpanded ? t('hideItems') : t('viewItems')}
                     </button>
                 )}
             </div>
-            <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 space-y-4">
+            <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 space-y-4">
                 <div className="space-y-3">
                     <NutrientProgress label={t('carbs')} value={totals.carbohydrates} goal={DAILY_GOALS.carbohydrates} Icon={CubeIcon} color="teal" />
                     <NutrientProgress label={t('protein')} value={totals.protein} goal={DAILY_GOALS.protein} Icon={SteakIcon} color="blue" />
@@ -98,17 +98,17 @@ const DailyIntakeTracker: React.FC = () => {
                 </div>
                 
                 {isExpanded && loggedItems.length > 0 && (
-                    <div className="pt-3 border-t border-gray-100 dark:border-gray-700 animate-fadeInUp">
-                        <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('loggedItems')}</h3>
+                    <div className="pt-3 border-t border-white/10 animate-fadeInUp">
+                        <h3 className="font-semibold text-brand-beige mb-2">{t('loggedItems')}</h3>
                         <ul className="space-y-2 max-h-40 overflow-y-auto pr-2 -mr-2">
                             {loggedItems.map(item => (
-                                <li key={item.id} className="flex justify-between items-center text-sm p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg group">
-                                    <span className="text-gray-800 dark:text-gray-200 truncate pr-2">{item.name}</span>
+                                <li key={item.id} className="flex justify-between items-center text-sm p-2 bg-brand-dark/50 rounded-lg group">
+                                    <span className="text-brand-offwhite truncate pr-2">{item.name}</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="font-semibold text-gray-600 dark:text-gray-400 shrink-0">{Math.round(item.calories)} kcal</span>
+                                        <span className="font-semibold text-brand-beige/80 shrink-0">{Math.round(item.calories)} kcal</span>
                                         <button 
                                             onClick={() => handleDeleteItem(item.id)}
-                                            className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-red-500"
+                                            className="opacity-0 group-hover:opacity-100 transition-opacity text-brand-beige/60 hover:text-red-500"
                                             aria-label={`Delete ${item.name}`}
                                         >
                                             <TrashIcon className="w-4 h-4" />
@@ -121,9 +121,9 @@ const DailyIntakeTracker: React.FC = () => {
                 )}
 
                 {loggedItems.length === 0 && (
-                    <div className="text-center py-6 border-t border-gray-100 dark:border-gray-700">
-                        <p className="text-gray-500 dark:text-gray-400 font-semibold">{t('noFoodLogged')}</p>
-                        <p className="text-sm text-gray-400 dark:text-gray-500">{t('noFoodLoggedDescription')}</p>
+                    <div className="text-center py-6 border-t border-white/10">
+                        <p className="text-brand-beige font-semibold">{t('noFoodLogged')}</p>
+                        <p className="text-sm text-brand-beige/80">{t('noFoodLoggedDescription')}</p>
                     </div>
                 )}
             </div>

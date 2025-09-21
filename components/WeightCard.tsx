@@ -25,17 +25,17 @@ const WeightCard: React.FC<WeightCardProps> = ({ weight, unit, timestamp }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col justify-between h-full">
+    <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-between h-full">
       <div>
-        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-1">
+        <div className="flex items-center justify-between text-sm text-brand-beige/80 mb-1">
           <span>{t('currentWeight')}</span>
           <WeightScaleIcon className="w-5 h-5" />
         </div>
-        <p className="text-5xl font-bold tracking-tight text-gray-800 dark:text-white">{weight}</p>
-        <p className="text-sm text-gray-500 dark:text-gray-400">{unit}</p>
+        <p className="text-5xl font-bold tracking-tight text-brand-offwhite">{weight}</p>
+        <p className="text-sm text-brand-beige/80">{unit}</p>
       </div>
       <div className="mt-4">
-        <p className="text-xs text-gray-500 dark:text-gray-400">{formatTimestamp(timestamp)}</p>
+        <p className="text-xs text-brand-beige/60">{formatTimestamp(timestamp)}</p>
       </div>
     </div>
   );

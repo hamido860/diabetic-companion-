@@ -10,15 +10,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+    <div className="border-b border-white/10 last:border-b-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center text-left py-4"
         aria-expanded={isOpen}
       >
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{title}</h3>
+        <h3 className="text-lg font-semibold text-brand-offwhite">{title}</h3>
         <ChevronDownIcon
-          className={`w-6 h-6 text-gray-500 dark:text-gray-400 transform transition-transform duration-300 ${
+          className={`w-6 h-6 text-brand-beige/80 transform transition-transform duration-300 ${
             isOpen ? 'rotate-180' : 'rotate-0'
           }`}
         />
@@ -29,7 +29,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, children }) => {
         }`}
       >
         <div className="overflow-hidden">
-          <div className="pb-4 text-gray-600 dark:text-gray-400 prose prose-sm sm:prose-base dark:prose-invert max-w-none">
+          <div className="pb-4 text-brand-beige/90 prose prose-sm sm:prose-base dark:prose-invert max-w-none">
             {children}
           </div>
         </div>

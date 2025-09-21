@@ -26,12 +26,12 @@ const LogStepsModal: React.FC<{ onClose: () => void; onSave: (steps: number) => 
           role="dialog"
         >
             <div 
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-sm p-6 space-y-4 animate-scaleIn"
+                className="bg-brand-olive rounded-3xl shadow-xl w-full max-w-sm p-6 space-y-4 animate-scaleIn"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-between items-center">
-                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{t('logSteps')}</h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <h2 className="text-2xl font-bold text-brand-offwhite">{t('logSteps')}</h2>
+                    <button onClick={onClose} className="text-brand-beige/60 hover:text-brand-beige">
                         <XMarkIcon className="w-6 h-6" />
                     </button>
                 </div>
@@ -44,7 +44,7 @@ const LogStepsModal: React.FC<{ onClose: () => void; onSave: (steps: number) => 
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
                         placeholder={t('enterNumberOfSteps')}
-                        className="w-full p-4 text-lg border-2 border-gray-200 bg-white dark:bg-gray-700 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition-shadow shadow-sm"
+                        className="w-full p-4 text-lg border-2 border-brand-dark bg-brand-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-yellow transition-shadow shadow-sm"
                         autoFocus
                     />
                     {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
@@ -53,13 +53,13 @@ const LogStepsModal: React.FC<{ onClose: () => void; onSave: (steps: number) => 
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
                     <button
                         onClick={handleSave}
-                        className="w-full bg-teal-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-600 transition-colors"
+                        className="w-full bg-brand-yellow text-brand-dark font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                     >
                         {t('addSteps')}
                     </button>
                     <button
                         onClick={onClose}
-                        className="w-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 font-semibold py-3 px-4 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                        className="w-full bg-brand-dark text-brand-beige font-semibold py-3 px-4 rounded-lg hover:bg-opacity-80 transition-colors"
                     >
                         {t('cancel')}
                     </button>
@@ -95,25 +95,25 @@ const WalkCounter: React.FC = () => {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col justify-between h-full">
+      <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-between h-full">
         <div>
-          <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-1">
+          <div className="flex items-center justify-between text-sm text-brand-beige/80 mb-1">
             <span>{t('todaysSteps')}</span>
             <WalkingIcon className="w-5 h-5" />
           </div>
-          <p className="text-5xl font-bold tracking-tight text-gray-800 dark:text-white">{steps.toLocaleString()}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('goal')} {goal.toLocaleString()}</p>
+          <p className="text-5xl font-bold tracking-tight text-brand-offwhite">{steps.toLocaleString()}</p>
+          <p className="text-sm text-brand-beige/80">{t('goal')} {goal.toLocaleString()}</p>
         </div>
         <div className="mt-4 space-y-3">
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+          <div className="w-full bg-brand-dark rounded-full h-2.5">
             <div
-              className="bg-teal-500 h-2.5 rounded-full transition-all duration-500"
+              className="bg-brand-yellow h-2.5 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="w-full flex items-center justify-center gap-2 text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors bg-teal-50 hover:bg-teal-100 dark:bg-gray-700 text-teal-600 dark:text-teal-400 dark:hover:bg-gray-600"
+            className="w-full flex items-center justify-center gap-2 text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors bg-brand-dark/50 hover:bg-brand-dark text-brand-yellow"
             aria-label={t('logSteps')}
           >
             <PencilIcon className="w-4 h-4" />

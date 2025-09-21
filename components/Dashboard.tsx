@@ -5,8 +5,7 @@ import PredictiveCard from './PredictiveCard';
 import WalkCounter from './WalkCounter';
 import WeightCard from './WeightCard';
 import DailyIntakeTracker from './DailyIntakeTracker';
-import { CameraIcon, PlusIcon, SunIcon, MoonIcon, WeightScaleIcon, Cog6ToothIcon, XMarkIcon } from './icons/Icons';
-import { useTheme } from '../contexts/ThemeContext';
+import { CameraIcon, PlusIcon, WeightScaleIcon, Cog6ToothIcon, XMarkIcon } from './icons/Icons';
 import { useLocalization } from '../contexts/LocalizationContext';
 import LogGlucoseModal from './LogGlucoseModal';
 import LogWeightModal from './LogWeightModal';
@@ -18,7 +17,6 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
-  const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t } = useLocalization();
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [latestGlucose, setLatestGlucose] = useState<GlucoseLog | null>(null);
@@ -78,26 +76,19 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
     <div className="space-y-6">
       <header className="flex justify-between items-start">
         <div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">{greeting}</h1>
-          <p className="text-gray-500 dark:text-gray-400 text-md sm:text-lg">{t('summaryToday')}</p>
+          <h1 className="text-4xl sm:text-5xl font-bold text-brand-offwhite">{greeting}</h1>
+          <p className="text-brand-beige opacity-80 text-md sm:text-lg">{t('summaryToday')}</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={toggleLanguage}
-            className="font-semibold text-sm w-10 h-10 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors shadow-sm"
+            className="font-semibold text-sm w-10 h-10 flex items-center justify-center rounded-full bg-brand-olive hover:bg-opacity-80 text-brand-beige transition-colors shadow-sm"
           >
             {language.toUpperCase()}
           </button>
           <button
-            onClick={toggleTheme}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors shadow-sm"
-            aria-label="Toggle theme"
-          >
-            {theme === 'light' ? <MoonIcon className="w-5 h-5" /> : <SunIcon className="w-5 h-5" />}
-          </button>
-          <button
             onClick={() => setIsSettingsModalOpen(true)}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors shadow-sm"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-brand-olive hover:bg-opacity-80 text-brand-beige transition-colors shadow-sm"
             aria-label={t('settings')}
           >
             <Cog6ToothIcon className="w-5 h-5" />
@@ -113,8 +104,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
             timestamp={latestGlucose.timestamp}
           />
         ) : (
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col justify-center items-center text-center h-full">
-            <p className="text-gray-500 dark:text-gray-400">{t('logYourFirstGlucose')}</p>
+          <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-center items-center text-center h-full">
+            <p className="text-brand-beige opacity-80">{t('logYourFirstGlucose')}</p>
           </div>
         )}
         {latestWeight ? (
@@ -124,8 +115,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
             timestamp={latestWeight.timestamp}
           />
         ) : (
-            <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col justify-center items-center text-center h-full">
-            <p className="text-gray-500 dark:text-gray-400">{t('logYourWeight')}</p>
+            <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-center items-center text-center h-full">
+            <p className="text-brand-beige opacity-80">{t('logYourWeight')}</p>
           </div>
         )}
       </div>
@@ -151,11 +142,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
         >
           {fabActions.map(({ label, Icon, action }) => (
             <div key={label} className="flex items-center gap-3 rtl:flex-row-reverse">
-              <span className="bg-white dark:bg-gray-700 text-sm font-semibold text-gray-700 dark:text-gray-200 py-1.5 px-3 rounded-full shadow-md">{label}</span>
+              <span className="bg-brand-olive text-sm font-semibold text-brand-beige py-1.5 px-3 rounded-full shadow-md">{label}</span>
               <button
                 onClick={() => { action(); setIsFabOpen(false); }}
                 aria-label={label}
-                className="w-14 h-14 bg-white dark:bg-gray-700 text-teal-600 dark:text-teal-400 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+                className="w-14 h-14 bg-brand-olive text-brand-yellow rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
               >
                 <Icon className="w-7 h-7" />
               </button>
@@ -165,7 +156,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
 
         <button
           onClick={() => setIsFabOpen(!isFabOpen)}
-          className="w-16 h-16 bg-teal-500 text-white rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:bg-teal-600 active:scale-95"
+          className="w-16 h-16 bg-brand-yellow text-brand-dark rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:bg-brand-yellow/90 active:scale-95"
           aria-haspopup="true"
           aria-expanded={isFabOpen}
           aria-label={t('quickActions')}

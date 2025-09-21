@@ -1,11 +1,11 @@
-import { GoogleGenAI, Type, GenerateContentResponse, Chat } from "@google/genai";
+import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
 import { Recipe, RecipeNutrition } from '../types';
 
-if (!import.meta.env.VITE_API_KEY) {
-    throw new Error("VITE_API_KEY environment variable is not set");
+if (!process.env.API_KEY) {
+    throw new Error("API_KEY environment variable is not set");
 }
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 // Utility to convert file to base64
 const fileToGenerativePart = async (file: File) => {
@@ -228,29 +228,4 @@ export const analyzeRecipeNutrition = async (recipe: Recipe): Promise<RecipeNutr
         console.error(`Error analyzing nutrition for recipe "${recipe.strMeal}":`, error);
         throw new Error(`Failed to analyze nutrition for "${recipe.strMeal}".`);
     }
-};
-
-
-let chatInstance: Chat | null = null;
-
-export const getChat = (): Chat => {
-    if (!chatInstance) {
-        chatInstance = ai.chats.create({
-            model: 'gemini-2.5-flash',
-            config: {
-                systemInstruction: 'You are a friendly, reassuring, and knowledgeable AI assistant for individuals managing diabetes. Your tone should be calm and trustworthy. Provide supportive advice, answer questions about food, exercise, and general diabetes management. Do not provide medical advice. If asked for medical advice, gently redirect the user to consult their doctor. Keep responses concise and easy to understand.',
-            },
-            history: [
-              {
-                role: 'user',
-                parts: [{ text: "Hello, I'm using your app to help manage my diabetes." }],
-              },
-              {
-                role: 'model',
-                parts: [{ text: "Hello! I'm here to help. Feel free to ask me anything about food, exercise, or general diabetes management. How can I support you today?" }],
-              },
-            ]
-        });
-    }
-    return chatInstance;
 };

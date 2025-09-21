@@ -34,10 +34,10 @@ const NutritionModal: React.FC<{
 
     const NutrientDisplay: React.FC<{ label: string; value: number; unit: string; Icon: React.FC<{className?: string}>; color: string; }> = ({ label, value, unit, Icon, color }) => {
          const colorStyles: { [key: string]: { bg: string, text: string } } = {
-            teal: { bg: 'bg-teal-50 dark:bg-teal-900/50', text: 'text-teal-700 dark:text-teal-300' },
-            blue: { bg: 'bg-blue-50 dark:bg-blue-900/50', text: 'text-blue-700 dark:text-blue-300' },
-            yellow: { bg: 'bg-yellow-50 dark:bg-yellow-900/50', text: 'text-yellow-700 dark:text-yellow-300' },
-            orange: { bg: 'bg-orange-50 dark:bg-orange-900/50', text: 'text-orange-700 dark:text-orange-300' },
+            teal: { bg: 'bg-brand-dark/50', text: 'text-brand-yellow' },
+            blue: { bg: 'bg-brand-dark/50', text: 'text-blue-300' },
+            yellow: { bg: 'bg-brand-dark/50', text: 'text-yellow-300' },
+            orange: { bg: 'bg-brand-dark/50', text: 'text-orange-300' },
         };
         const styles = colorStyles[color];
         return (
@@ -47,7 +47,7 @@ const NutritionModal: React.FC<{
                     <span className={`font-semibold text-md ${styles.text}`}>{label}</span>
                 </div>
                 <div className="text-right">
-                    <p className="text-xl font-bold text-gray-800 dark:text-white">{value}</p>
+                    <p className="text-xl font-bold text-brand-offwhite">{value}</p>
                     <p className={`text-sm font-semibold ${styles.text}`}>{unit}</p>
                 </div>
             </div>
@@ -62,26 +62,26 @@ const NutritionModal: React.FC<{
           role="dialog"
         >
           <div 
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col"
+            className="bg-brand-olive rounded-3xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-start">
+            <div className="p-6 border-b border-white/10 flex justify-between items-start">
                 <div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-white">{t('nutritionAnalysis')}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('nutritionInfoFor')} "{recipeName}"</p>
+                    <h3 className="text-xl font-bold text-brand-offwhite">{t('nutritionAnalysis')}</h3>
+                    <p className="text-sm text-brand-beige/80">{t('nutritionInfoFor')} "{recipeName}"</p>
                 </div>
-                <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 -m-1">
+                <button onClick={onClose} className="text-brand-beige/60 hover:text-brand-beige p-1 -m-1">
                     <XMarkIcon className="w-6 h-6" />
                 </button>
             </div>
             <div className="p-6 overflow-y-auto space-y-3">
                 {nutritionItems.map(item => <NutrientDisplay key={item.label} {...item} />)}
-                 <p className="text-xs text-center text-gray-400 dark:text-gray-500 pt-3">{t('estimatedTotalNutrition')}</p>
+                 <p className="text-xs text-center text-brand-beige/50 pt-3">{t('estimatedTotalNutrition')}</p>
             </div>
-            <div className="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-b-2xl border-t border-gray-100 dark:border-gray-700">
+            <div className="p-4 bg-brand-dark/50 rounded-b-3xl border-t border-white/10">
                 <button
                     onClick={onClose}
-                    className="w-full bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-semibold py-2.5 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                    className="w-full bg-brand-dark text-brand-beige font-semibold py-2.5 px-4 rounded-lg hover:bg-opacity-80 transition-colors"
                 >
                     {t('close')}
                 </button>
@@ -155,34 +155,34 @@ const RecipeDetailView: React.FC<{ recipe: Recipe; onBack: () => void }> = ({ re
             <header className="mb-4">
                 <button
                     onClick={onBack}
-                    className="p-2 rounded-full bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                    className="p-2 rounded-full bg-brand-olive hover:bg-opacity-80 transition-colors shadow-sm"
                     aria-label="Back to recipes"
                 >
-                    <ArrowLeftIcon className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+                    <ArrowLeftIcon className="w-6 h-6 text-brand-beige" />
                 </button>
             </header>
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl mx-auto overflow-hidden">
+            <div className="bg-brand-olive rounded-3xl shadow-xl w-full max-w-4xl mx-auto overflow-hidden">
                 <img src={recipe.strMealThumb} alt={content.title} className="w-full h-64 object-cover" />
                 <div className="p-6 md:p-8">
                     {isTranslating ? (
                         <div className="flex flex-col items-center justify-center h-48">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
-                            <p className="mt-3 text-gray-500 dark:text-gray-400">{t('translating')}</p>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-yellow"></div>
+                            <p className="mt-3 text-brand-beige/80">{t('translating')}</p>
                         </div>
                     ) : (
                         <>
                             {translationError && (
-                                <div className="bg-yellow-50 dark:bg-yellow-900/30 p-3 rounded-lg text-center mb-4 border border-yellow-200 dark:border-yellow-800">
-                                    <p className="text-sm text-yellow-700 dark:text-yellow-300">{translationError}</p>
+                                <div className="bg-yellow-900/30 p-3 rounded-lg text-center mb-4 border border-yellow-800">
+                                    <p className="text-sm text-yellow-300">{translationError}</p>
                                 </div>
                             )}
                             
                             <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4 mb-6">
-                                <h3 className="text-3xl font-bold text-gray-800 dark:text-white">{content.title}</h3>
+                                <h3 className="text-3xl font-bold text-brand-offwhite">{content.title}</h3>
                                 <button
                                     onClick={handleAnalyzeNutrition}
                                     disabled={isAnalyzingNutrition}
-                                    className="flex items-center justify-center gap-2 bg-teal-50 text-teal-600 dark:bg-teal-900/50 dark:text-teal-300 font-semibold py-2.5 px-5 rounded-lg hover:bg-teal-100 dark:hover:bg-teal-900 transition-colors shadow-sm disabled:opacity-60 disabled:cursor-wait shrink-0"
+                                    className="flex items-center justify-center gap-2 bg-brand-yellow/10 text-brand-yellow font-semibold py-2.5 px-5 rounded-lg hover:bg-brand-yellow/20 transition-colors shadow-sm disabled:opacity-60 disabled:cursor-wait shrink-0"
                                 >
                                     {isAnalyzingNutrition ? (
                                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-current"></div>
@@ -194,26 +194,26 @@ const RecipeDetailView: React.FC<{ recipe: Recipe; onBack: () => void }> = ({ re
                             </div>
 
                              {nutritionError && (
-                                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg text-center mb-4 border border-red-200 dark:border-red-800">
-                                    <p className="text-sm text-red-700 dark:text-red-300">{nutritionError}</p>
+                                <div className="bg-red-900/20 p-3 rounded-lg text-center mb-4 border border-red-800">
+                                    <p className="text-sm text-red-300">{nutritionError}</p>
                                 </div>
                             )}
 
                             <div className="grid md:grid-cols-3 gap-8">
                                 <div className="md:col-span-1">
-                                    <h4 className="font-bold text-xl mb-3 text-gray-700 dark:text-gray-300 border-b-2 border-teal-500 pb-2">{t('ingredients')}</h4>
-                                    <ul className="space-y-2 text-gray-600 dark:text-gray-400">
+                                    <h4 className="font-bold text-xl mb-3 text-brand-beige border-b-2 border-brand-yellow pb-2">{t('ingredients')}</h4>
+                                    <ul className="space-y-2 text-brand-beige/90">
                                         {content.ingredients.map((item, index) => (
                                             <li key={index} className="flex items-start gap-2">
-                                                <span className="text-teal-500 mt-1.5">&#8226;</span>
+                                                <span className="text-brand-yellow mt-1.5">&#8226;</span>
                                                 <span>{item}</span>
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
                                 <div className="md:col-span-2">
-                                    <h4 className="font-bold text-xl mb-3 text-gray-700 dark:text-gray-300 border-b-2 border-teal-500 pb-2">{t('instructions')}</h4>
-                                    <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none text-gray-600 dark:text-gray-400 whitespace-pre-wrap leading-relaxed">
+                                    <h4 className="font-bold text-xl mb-3 text-brand-beige border-b-2 border-brand-yellow pb-2">{t('instructions')}</h4>
+                                    <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none text-brand-beige/90 whitespace-pre-wrap leading-relaxed">
                                         {content.instructions}
                                     </div>
                                 </div>
@@ -227,11 +227,11 @@ const RecipeDetailView: React.FC<{ recipe: Recipe; onBack: () => void }> = ({ re
 };
   
 const RecipeCardSkeleton = () => (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden animate-pulse">
-        <div className="w-full h-28 bg-gray-200 dark:bg-gray-700"></div>
+    <div className="bg-brand-olive rounded-3xl shadow-lg shadow-black/20 overflow-hidden animate-pulse">
+        <div className="w-full h-28 bg-brand-dark"></div>
         <div className="p-3">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+            <div className="h-4 bg-brand-dark rounded w-3/4 mb-2"></div>
+            <div className="h-3 bg-brand-dark rounded w-1/2"></div>
         </div>
     </div>
 );
@@ -320,21 +320,21 @@ const Recipes: React.FC = () => {
   
   return (
     <div className="space-y-6">
-      <div className="sticky top-4 z-10 bg-gray-100/95 dark:bg-gray-900/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-3 -mt-2 transition-all duration-300 border-b border-gray-200 dark:border-gray-700/50">
+      <div className="sticky top-4 z-10 bg-brand-dark/95 backdrop-blur-sm -mx-4 px-4 pt-2 pb-3 -mt-2 transition-all duration-300 border-b border-white/10">
         <header>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('healthyRecipes')}</h1>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">{t('healthyRecipesDescription')}</p>
+            <h1 className="text-3xl font-bold text-brand-offwhite">{t('healthyRecipes')}</h1>
+            <p className="text-brand-beige/80 text-sm">{t('healthyRecipesDescription')}</p>
         </header>
 
         <div className="mt-4">
-          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-3">{t('categories')}</h2>
+          <h2 className="text-lg font-bold text-brand-offwhite mb-3">{t('categories')}</h2>
           <div className="flex space-x-3 rtl:space-x-reverse overflow-x-auto pb-2 -mb-2">
             {isLoadingCategories ? (
               <>
-                  <div className="h-10 w-24 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse shrink-0"></div>
-                  <div className="h-10 w-20 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse shrink-0"></div>
-                  <div className="h-10 w-28 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse shrink-0"></div>
-                  <div className="h-10 w-24 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse shrink-0"></div>
+                  <div className="h-10 w-24 bg-brand-olive rounded-lg animate-pulse shrink-0"></div>
+                  <div className="h-10 w-20 bg-brand-olive rounded-lg animate-pulse shrink-0"></div>
+                  <div className="h-10 w-28 bg-brand-olive rounded-lg animate-pulse shrink-0"></div>
+                  <div className="h-10 w-24 bg-brand-olive rounded-lg animate-pulse shrink-0"></div>
               </>
             ) : (
               categories.map((cat) => (
@@ -343,8 +343,8 @@ const Recipes: React.FC = () => {
                   onClick={() => setSelectedCategory(cat.strCategory)}
                   className={`shrink-0 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 ${
                     selectedCategory === cat.strCategory
-                      ? 'bg-teal-500 text-white shadow'
-                      : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shadow-sm'
+                      ? 'bg-brand-yellow text-brand-dark shadow'
+                      : 'bg-brand-olive text-brand-beige hover:bg-opacity-80 shadow-sm'
                   }`}
                 >
                   {cat.strCategory}
@@ -356,9 +356,9 @@ const Recipes: React.FC = () => {
       </div>
       
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-xl text-center border border-red-200 dark:border-red-800">
-          <h3 className="text-lg font-bold text-red-700 dark:text-red-400">{t('oops')}</h3>
-          <p className="text-sm text-red-600 dark:text-red-500">{error}</p>
+        <div className="bg-red-900/20 p-4 rounded-xl text-center border border-red-800">
+          <h3 className="text-lg font-bold text-red-400">{t('oops')}</h3>
+          <p className="text-sm text-red-500">{error}</p>
         </div>
       )}
       
@@ -367,14 +367,14 @@ const Recipes: React.FC = () => {
           Array.from({ length: 6 }).map((_, i) => <RecipeCardSkeleton key={i} />)
         ) : (
           recipes.map((recipe) => (
-            <button key={recipe.idMeal} onClick={() => handleSelectRecipe(recipe)} className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden text-left transition-transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-teal-400 relative">
+            <button key={recipe.idMeal} onClick={() => handleSelectRecipe(recipe)} className="bg-brand-olive rounded-3xl shadow-lg shadow-black/20 overflow-hidden text-left transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-yellow relative">
               <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-28 object-cover" />
               <div className="p-3">
-                <h3 className="font-semibold text-sm text-gray-800 dark:text-gray-200 leading-tight">{recipe.strMeal}</h3>
+                <h3 className="font-semibold text-sm text-brand-offwhite leading-tight">{recipe.strMeal}</h3>
               </div>
               {isFetchingDetails && activeRecipeId === recipe.idMeal && (
-                  <div className="absolute inset-0 bg-white/70 dark:bg-gray-800/70 flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-500"></div>
+                  <div className="absolute inset-0 bg-brand-olive/80 flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-yellow"></div>
                   </div>
               )}
             </button>

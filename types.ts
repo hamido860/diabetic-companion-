@@ -1,10 +1,10 @@
 export enum ActiveView {
   Dashboard = 'dashboard',
   MealScanner = 'mealScanner',
-  AiChat = 'aiChat',
   Logs = 'logs',
   Recipes = 'recipes',
   Learn = 'learn',
+  Nutrition = 'nutrition',
 }
 
 export interface NutritionInfo {
@@ -34,11 +34,6 @@ export interface FoodNutritionInfo {
   servingSize: string;
   suitability: 'Recommended' | 'Caution' | 'Not Recommended';
   reasoning: string;
-}
-
-export interface ChatMessage {
-    role: 'user' | 'model';
-    text: string;
 }
 
 export interface Category {
