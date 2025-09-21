@@ -3,6 +3,7 @@ import { useLocalization } from '../contexts/LocalizationContext';
 import { GlucoseLog, GlucoseStatus, WeightLog } from '../types';
 import { getGlucoseLogs, getWeightLogs, deleteGlucoseLog, deleteWeightLog } from '../services/logService';
 import { CalendarDaysIcon, ChartLineIcon, ChartScatterIcon, TrashIcon, WeightScaleIcon } from './icons/Icons';
+import { getStatusStyles } from '../utils';
 import {
     LineChart,
     Line,
@@ -86,16 +87,6 @@ const Logs: React.FC = () => {
         return weightLogs.filter(log => new Date(log.timestamp) >= filterDateLimit);
     }, [weightLogs, activeFilter]);
     
-    const getStatusStyles = (status: GlucoseStatus): string => {
-        switch (status) {
-            case 'High': return 'bg-red-900/50 text-red-400';
-            case 'Slightly High': return 'bg-orange-900/50 text-orange-400';
-            case 'Normal': return 'bg-green-900/50 text-green-400';
-            case 'Low': return 'bg-blue-900/50 text-blue-400';
-            default: return 'bg-brand-dark text-brand-beige/80';
-        }
-    };
-
     const formatDate = (timestamp: string) => {
         const date = new Date(timestamp);
         return date.toLocaleDateString(undefined, {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocalization } from '../contexts/LocalizationContext';
 import { WeightScaleIcon } from './icons/Icons';
+import { formatTimestamp } from '../utils';
 
 interface WeightCardProps {
   weight: number;
@@ -10,19 +11,6 @@ interface WeightCardProps {
 
 const WeightCard: React.FC<WeightCardProps> = ({ weight, unit, timestamp }) => {
   const { t } = useLocalization();
-
-  const formatTimestamp = (isoString: string): string => {
-    const date = new Date(isoString);
-    const now = new Date();
-    const diffSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (diffSeconds < 60) return 'Just now';
-    const diffMinutes = Math.floor(diffSeconds / 60);
-    if (diffMinutes < 60) return `${diffMinutes} mins ago`;
-    const diffHours = Math.floor(diffMinutes / 60);
-    if (diffHours < 24) return `${diffHours} hours ago`;
-    return date.toLocaleDateString();
-  };
 
   return (
     <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-between h-full">

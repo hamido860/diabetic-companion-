@@ -1,10 +1,6 @@
 import { GlucoseLog, GlucoseStatus, LoggedItem, WeightLog } from '../types';
 import { mockGlucoseLogs, mockWeightLogs } from './mockLogs';
-
-const GLUCOSE_LOGS_STORAGE_KEY = 'glucoseLogs';
-const MEAL_LOGS_STORAGE_KEY = 'mealLogs';
-const WEIGHT_LOGS_STORAGE_KEY = 'weightLogs';
-const DAILY_STEPS_STORAGE_KEY = 'dailySteps';
+import { GLUCOSE_LOGS_STORAGE_KEY, MEAL_LOGS_STORAGE_KEY, WEIGHT_LOGS_STORAGE_KEY, DAILY_STEPS_STORAGE_KEY } from '../constants';
 
 function getStatusForValue(value: number): GlucoseStatus {
   if (value < 70) return 'Low';

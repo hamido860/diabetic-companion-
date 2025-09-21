@@ -3,13 +3,7 @@ import { useLocalization } from '../contexts/LocalizationContext';
 import { getTodaysIntake, deleteLoggedItem } from '../services/logService';
 import { LoggedItem } from '../types';
 import { CubeIcon, SteakIcon, DropletIcon, FireIcon, TrashIcon } from './icons/Icons';
-
-const DAILY_GOALS = {
-    carbohydrates: 150,
-    protein: 100,
-    fats: 70,
-    calories: 2000,
-};
+import { DAILY_GOALS } from '../constants';
 
 const NutrientProgress: React.FC<{ label: string; value: number; goal: number; Icon: React.FC<{ className?: string }>; color: string }> = ({ label, value, goal, Icon, color }) => {
     const { t } = useLocalization();

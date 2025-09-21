@@ -1,1 +1,1 @@
-// This component is no longer used.
+// This context has been removed.
