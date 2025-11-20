@@ -6,10 +6,6 @@ import WeightCard from './WeightCard';
 import { CameraIcon, PlusIcon, WeightScaleIcon, Cog6ToothIcon, XMarkIcon } from './icons/Icons';
 import { useLocalization } from '../contexts/LocalizationContext';
 import { getGlucoseLogs, addGlucoseLog, getWeightLogs, addWeightLog } from '../services/logService';
-// Modals will be implemented later
-// import LogGlucoseModal from './LogGlucoseModal';
-// import LogWeightModal from './LogWeightModal';
-// import SettingsModal from './SettingsModal';
 
 interface DashboardProps {
   onQuickAction: (view: ActiveView) => void;
@@ -147,7 +143,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Modals will be implemented here */}
     </View>
   );
 };

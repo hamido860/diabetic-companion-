@@ -4,7 +4,7 @@ import { useLocalization } from '../contexts/LocalizationContext';
 import { GlucoseLog, GlucoseStatus, WeightLog } from '../types';
 import { getGlucoseLogs, getWeightLogs, deleteGlucoseLog, deleteWeightLog } from '../services/logService';
 import { CalendarDaysIcon, ChartLineIcon, ChartScatterIcon, TrashIcon, WeightScaleIcon } from './icons/Icons';
-import { LineChart, ScatterChart } from 'react-native-chart-kit';
+import { LineChart } from 'react-native-chart-kit';
 
 type FilterOption = 'week' | 'month' | 'all';
 type LogType = 'glucose' | 'weight';
