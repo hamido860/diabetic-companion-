@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode, useCallback, useEffect } from 'react';
+import { I18nManager } from 'react-native';
 import { translations } from '../locales/translations';
 
 type Language = 'en' | 'es' | 'ar';
@@ -16,11 +17,10 @@ export const LocalizationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const [language, setLanguage] = useState<Language>('en');
 
   useEffect(() => {
-    if (language === 'ar') {
-      document.documentElement.setAttribute('dir', 'rtl');
-    } else {
-      document.documentElement.setAttribute('dir', 'ltr');
-    }
+    const isRTL = language === 'ar';
+    I18nManager.forceRTL(isRTL);
+    I18nManager.allowRTL(isRTL);
+    // You might need to restart the app for the changes to take effect
   }, [language]);
 
   const t = useCallback((key: TranslationKey): string => {

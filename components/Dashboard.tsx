@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { ActiveView, GlucoseLog, WeightLog } from '../types';
 import GlucoseCard from './GlucoseCard';
-import PredictiveCard from './PredictiveCard';
-import WalkCounter from './WalkCounter';
 import WeightCard from './WeightCard';
-import DailyIntakeTracker from './DailyIntakeTracker';
 import { CameraIcon, PlusIcon, WeightScaleIcon, Cog6ToothIcon, XMarkIcon } from './icons/Icons';
 import { useLocalization } from '../contexts/LocalizationContext';
-import LogGlucoseModal from './LogGlucoseModal';
-import LogWeightModal from './LogWeightModal';
-import SettingsModal from './SettingsModal';
 import { getGlucoseLogs, addGlucoseLog, getWeightLogs, addWeightLog } from '../services/logService';
 
 interface DashboardProps {
@@ -73,114 +68,195 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
   ];
 
   return (
-    <div className="space-y-6">
-      <header className="flex justify-between items-start">
-        <div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-brand-offwhite">{greeting}</h1>
-          <p className="text-brand-beige opacity-80 text-md sm:text-lg">{t('summaryToday')}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={toggleLanguage}
-            className="font-semibold text-sm w-10 h-10 flex items-center justify-center rounded-full bg-brand-olive hover:bg-opacity-80 text-brand-beige transition-colors shadow-sm"
-          >
-            {language.toUpperCase()}
-          </button>
-          <button
-            onClick={() => setIsSettingsModalOpen(true)}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-brand-olive hover:bg-opacity-80 text-brand-beige transition-colors shadow-sm"
-            aria-label={t('settings')}
-          >
-            <Cog6ToothIcon className="w-5 h-5" />
-          </button>
-        </div>
-      </header>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {latestGlucose ? (
-          <GlucoseCard 
-            glucose={latestGlucose.value}
-            status={latestGlucose.status}
-            timestamp={latestGlucose.timestamp}
-          />
-        ) : (
-          <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-center items-center text-center h-full">
-            <p className="text-brand-beige opacity-80">{t('logYourFirstGlucose')}</p>
-          </div>
-        )}
-        {latestWeight ? (
-          <WeightCard
-            weight={latestWeight.value}
-            unit={latestWeight.unit}
-            timestamp={latestWeight.timestamp}
-          />
-        ) : (
-            <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-center items-center text-center h-full">
-            <p className="text-brand-beige opacity-80">{t('logYourWeight')}</p>
-          </div>
-        )}
-      </div>
-      <PredictiveCard />
-      <WalkCounter />
-      <DailyIntakeTracker />
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.greeting}>{greeting}</Text>
+            <Text style={styles.summary}>{t('summaryToday')}</Text>
+          </View>
+          <View style={styles.headerActions}>
+            <TouchableOpacity style={styles.languageButton} onPress={toggleLanguage}>
+              <Text style={styles.languageButtonText}>{language.toUpperCase()}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.settingsButton} onPress={() => setIsSettingsModalOpen(true)}>
+              <Cog6ToothIcon width={20} height={20} color="#F3F3E9" />
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      {/* FAB Backdrop */}
+        <View style={styles.cardGrid}>
+          {latestGlucose ? (
+            <GlucoseCard
+              glucose={latestGlucose.value}
+              status={latestGlucose.status}
+              timestamp={latestGlucose.timestamp}
+            />
+          ) : (
+            <View style={styles.placeholderCard}>
+              <Text style={styles.placeholderText}>{t('logYourFirstGlucose')}</Text>
+            </View>
+          )}
+          {latestWeight ? (
+            <WeightCard
+              weight={latestWeight.value}
+              unit={latestWeight.unit}
+              timestamp={latestWeight.timestamp}
+            />
+          ) : (
+            <View style={styles.placeholderCard}>
+              <Text style={styles.placeholderText}>{t('logYourWeight')}</Text>
+            </View>
+          )}
+        </View>
+      </ScrollView>
+
       {isFabOpen && (
-        <div
-          onClick={() => setIsFabOpen(false)}
-          className="fixed inset-0 bg-black/50 z-30 animate-fadeInUp"
-          style={{ animationDuration: '0.3s' }}
+        <TouchableOpacity
+          style={styles.fabBackdrop}
+          onPress={() => setIsFabOpen(false)}
         />
       )}
 
-      {/* FAB Menu */}
-      <div className="fixed bottom-28 right-6 rtl:right-auto rtl:left-6 z-40 flex flex-col items-end">
-        <div
-          className={`flex flex-col items-end gap-4 mb-4 transition-all duration-300 ease-in-out ${
-            isFabOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-          }`}
-        >
-          {fabActions.map(({ label, Icon, action }) => (
-            <div key={label} className="flex items-center gap-3 rtl:flex-row-reverse">
-              <span className="bg-brand-olive text-sm font-semibold text-brand-beige py-1.5 px-3 rounded-full shadow-md">{label}</span>
-              <button
-                onClick={() => { action(); setIsFabOpen(false); }}
-                aria-label={label}
-                className="w-14 h-14 bg-brand-olive text-brand-yellow rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
-              >
-                <Icon className="w-7 h-7" />
-              </button>
-            </div>
-          ))}
-        </div>
+      <View style={styles.fabContainer}>
+        {isFabOpen && (
+          <View style={styles.fabMenu}>
+            {fabActions.map(({ label, Icon, action }) => (
+              <View key={label} style={styles.fabAction}>
+                <Text style={styles.fabLabel}>{label}</Text>
+                <TouchableOpacity
+                  onPress={() => { action(); setIsFabOpen(false); }}
+                  style={styles.fabButton}
+                >
+                  <Icon width={28} height={28} color="#FFD700" />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        )}
 
-        <button
-          onClick={() => setIsFabOpen(!isFabOpen)}
-          className="w-16 h-16 bg-brand-yellow text-brand-dark rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:bg-brand-yellow/90 active:scale-95"
-          aria-haspopup="true"
-          aria-expanded={isFabOpen}
-          aria-label={t('quickActions')}
+        <TouchableOpacity
+          onPress={() => setIsFabOpen(!isFabOpen)}
+          style={styles.fab}
         >
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <PlusIcon
-              className={`absolute transition-all duration-300 ease-in-out ${
-              isFabOpen ? 'transform rotate-45 opacity-0' : 'transform rotate-0 opacity-100'
-              }`}
-            />
-            <XMarkIcon
-              className={`absolute transition-all duration-300 ease-in-out ${
-              isFabOpen ? 'transform rotate-0 opacity-100' : 'transform -rotate-45 opacity-0'
-              }`}
-            />
-          </div>
-        </button>
-      </div>
+          {isFabOpen ? <XMarkIcon width={32} height={32} color="#1E2A2D" /> : <PlusIcon width={32} height={32} color="#1E2A2D" />}
+        </TouchableOpacity>
+      </View>
 
-      {isLogModalOpen && <LogGlucoseModal onClose={() => setIsLogModalOpen(false)} onSave={handleSaveGlucose} />}
-      {isWeightModalOpen && <LogWeightModal onClose={() => setIsWeightModalOpen(false)} onSave={handleSaveWeight} />}
-      {isSettingsModalOpen && <SettingsModal onClose={() => setIsSettingsModalOpen(false)} />}
-    </div>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    padding: 20,
+  },
+  greeting: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#F3F3E9',
+  },
+  summary: {
+    color: '#F3F3E9',
+    opacity: 0.8,
+    fontSize: 16,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  languageButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#6B7A4A',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  languageButtonText: {
+    color: '#F3F3E9',
+    fontWeight: 'bold',
+  },
+  settingsButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#6B7A4A',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardGrid: {
+    padding: 20,
+    gap: 20,
+  },
+  placeholderCard: {
+    backgroundColor: '#6B7A4A',
+    padding: 16,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 150,
+  },
+  placeholderText: {
+    color: 'rgba(243, 243, 233, 0.8)',
+  },
+  fabBackdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 30,
+  },
+  fabContainer: {
+    position: 'absolute',
+    bottom: 120,
+    right: 24,
+    zIndex: 40,
+    alignItems: 'flex-end',
+  },
+  fabMenu: {
+    marginBottom: 16,
+    gap: 16,
+  },
+  fabAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  fabLabel: {
+    backgroundColor: '#6B7A4A',
+    color: '#F3F3E9',
+    fontSize: 14,
+    fontWeight: '600',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+  },
+  fabButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#6B7A4A',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fab: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#FFD700',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default Dashboard;
