@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ActiveView } from '../types';
 import { HomeIcon, DocumentChartBarIcon, BookOpenIcon, LightBulbIcon, MagnifyingGlassIcon } from './icons/Icons';
 import { useLocalization } from '../contexts/LocalizationContext';
@@ -20,31 +21,69 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, setActiveView }) => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-brand-olive z-50 rounded-t-[28px] shadow-[0_-5px_25px_rgba(0,0,0,0.1)]">
-      <div className="flex justify-around items-center h-24 max-w-lg mx-auto px-2">
+    <View style={styles.nav}>
+      <View style={styles.navContainer}>
         {navItems.map((item) => {
           const isActive = activeView === item.view;
           return (
-            <button
+            <TouchableOpacity
               key={item.view}
-              onClick={() => setActiveView(item.view)}
-              className={`flex flex-col items-center justify-center space-y-1 transition-colors w-16 ${
-                  isActive 
-                  ? 'text-brand-yellow' 
-                  : 'text-brand-beige/60 hover:text-brand-yellow'
-              }`}
-              aria-current={isActive ? 'page' : undefined}
+              onPress={() => setActiveView(item.view)}
+              style={styles.navItem}
+              accessibilityRole="button"
+              accessibilityState={{ selected: isActive }}
             >
-              <item.Icon className="w-7 h-7" />
-              <span className={`text-xs transition-all ${isActive ? 'font-bold' : 'font-medium'}`}>
+              <item.Icon width={28} height={28} color={isActive ? '#FFD700' : '#F3F3E9'} />
+              <Text style={[styles.navLabel, isActive && styles.activeNavLabel]}>
                 {item.label}
-              </span>
-            </button>
+              </Text>
+            </TouchableOpacity>
           );
         })}
-      </div>
-    </nav>
+      </View>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  nav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#6B7A4A',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 25,
+    elevation: 5,
+  },
+  navContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 96,
+    maxWidth: 512,
+    marginHorizontal: 'auto',
+    paddingHorizontal: 8,
+  },
+  navItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+  },
+  navLabel: {
+    fontSize: 12,
+    color: 'rgba(243, 243, 233, 0.6)',
+    marginTop: 4,
+  },
+  activeNavLabel: {
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
+});
 
 export default BottomNav;
