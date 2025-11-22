@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocalization } from '../contexts/LocalizationContext';
 import { GlucoseStatus } from '../types';
 import { formatTimestamp, getStatusInfo } from '../utils';
+import Card from './ui/Card';
 
 interface GlucoseCardProps {
   glucose: number;
@@ -22,22 +23,22 @@ const GlucoseCard: React.FC<GlucoseCardProps> = ({ glucose, status, timestamp })
   const statusInfo = getStatusInfo(status, t);
 
   return (
-    <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-between h-full">
+    <Card className="flex flex-col justify-between h-full min-h-[160px]">
       <div>
-        <div className="flex items-center justify-between text-sm text-brand-beige/80 mb-1">
-          <span>{t('glucose')}</span>
-          <span className={`font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 text-xs ${statusInfo.badgeStyles}`}>
+        <div className="flex items-center justify-between text-sm text-brand-text-muted mb-2">
+          <span className="font-medium">{t('glucose')}</span>
+          <span className={`font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 text-[10px] uppercase tracking-wider ${statusInfo.badgeStyles}`}>
             <statusInfo.Icon className="w-3 h-3" />
             {statusInfo.text}
           </span>
         </div>
         <p className={`text-5xl font-bold tracking-tight ${isAnimating ? 'animate-pulse-value' : ''} ${statusInfo.styles}`}>{glucose}</p>
-        <p className="text-sm text-brand-beige/80">{t('mgdl')}</p>
+        <p className="text-sm text-brand-text-muted mt-1 font-medium">{t('mgdl')}</p>
       </div>
-      <div className="mt-4">
-        <p className="text-xs text-brand-beige/60">{formatTimestamp(timestamp)}</p>
+      <div className="mt-4 border-t border-white/5 pt-2">
+        <p className="text-xs text-brand-text-muted opacity-60">{formatTimestamp(timestamp)}</p>
       </div>
-    </div>
+    </Card>
   );
 };
 

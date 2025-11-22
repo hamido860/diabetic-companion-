@@ -20,7 +20,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, setActiveView }) => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-brand-olive z-50 rounded-t-[28px] shadow-[0_-5px_25px_rgba(0,0,0,0.1)]">
+    <nav className="fixed bottom-0 left-0 right-0 bg-brand-surface/95 backdrop-blur-md z-50 rounded-t-[28px] shadow-[0_-5px_30px_rgba(0,0,0,0.3)] border-t border-white/5">
       <div className="flex justify-around items-center h-24 max-w-lg mx-auto px-2">
         {navItems.map((item) => {
           const isActive = activeView === item.view;
@@ -28,15 +28,18 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, setActiveView }) => {
             <button
               key={item.view}
               onClick={() => setActiveView(item.view)}
-              className={`flex flex-col items-center justify-center space-y-1 transition-colors w-16 ${
+              className={`relative flex flex-col items-center justify-center space-y-1.5 transition-all duration-300 w-16 group ${
                   isActive 
-                  ? 'text-brand-yellow' 
-                  : 'text-brand-beige/60 hover:text-brand-yellow'
+                  ? 'text-brand-primary'
+                  : 'text-brand-text-muted hover:text-brand-text'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
-              <item.Icon className="w-7 h-7" />
-              <span className={`text-xs transition-all ${isActive ? 'font-bold' : 'font-medium'}`}>
+              {isActive && (
+                <span className="absolute -top-3 w-8 h-1 bg-brand-primary rounded-full shadow-[0_0_10px_rgba(247,178,44,0.5)] animate-scaleIn" />
+              )}
+              <item.Icon className={`w-6 h-6 transition-transform duration-300 ${isActive ? '-translate-y-1' : 'group-hover:-translate-y-1'}`} />
+              <span className={`text-[10px] tracking-wide transition-all ${isActive ? 'font-bold opacity-100' : 'font-medium opacity-70'}`}>
                 {item.label}
               </span>
             </button>

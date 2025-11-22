@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocalization } from '../contexts/LocalizationContext';
-import { WeightScaleIcon } from './icons/Icons';
 import { formatTimestamp } from '../utils';
+import Card from './ui/Card';
 
 interface WeightCardProps {
   weight: number;
@@ -10,22 +10,30 @@ interface WeightCardProps {
 }
 
 const WeightCard: React.FC<WeightCardProps> = ({ weight, unit, timestamp }) => {
+  const [isAnimating, setIsAnimating] = useState(false);
   const { t } = useLocalization();
 
+  useEffect(() => {
+    setIsAnimating(true);
+    const timer = setTimeout(() => setIsAnimating(false), 400);
+    return () => clearTimeout(timer);
+  }, [weight]);
+
   return (
-    <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-between h-full">
+    <Card className="flex flex-col justify-between h-full min-h-[160px]">
       <div>
-        <div className="flex items-center justify-between text-sm text-brand-beige/80 mb-1">
-          <span>{t('currentWeight')}</span>
-          <WeightScaleIcon className="w-5 h-5" />
+        <div className="flex items-center justify-between text-sm text-brand-text-muted mb-2">
+           <span className="font-medium">{t('weight')}</span>
         </div>
-        <p className="text-5xl font-bold tracking-tight text-brand-offwhite">{weight}</p>
-        <p className="text-sm text-brand-beige/80">{unit}</p>
+        <div className="flex items-baseline gap-1">
+             <p className={`text-5xl font-bold tracking-tight text-brand-text ${isAnimating ? 'animate-pulse-value' : ''}`}>{weight}</p>
+             <span className="text-xl font-medium text-brand-text-muted">{unit}</span>
+        </div>
       </div>
-      <div className="mt-4">
-        <p className="text-xs text-brand-beige/60">{formatTimestamp(timestamp)}</p>
+      <div className="mt-4 border-t border-white/5 pt-2">
+        <p className="text-xs text-brand-text-muted opacity-60">{formatTimestamp(timestamp)}</p>
       </div>
-    </div>
+    </Card>
   );
 };
 
