@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActiveView } from '../types';
-import { HomeIcon, DocumentChartBarIcon, BookOpenIcon, LightBulbIcon, MagnifyingGlassIcon } from './icons/Icons';
+import { HomeIcon, ClipboardDocumentListIcon, BookOpenIcon, AcademicCapIcon, MagnifyingGlassIcon } from './icons/Icons';
 import { useLocalization } from '../contexts/LocalizationContext';
 
 interface BottomNavProps {
@@ -13,10 +13,10 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, setActiveView }) => {
 
   const navItems = [
     { view: ActiveView.Dashboard, Icon: HomeIcon, label: t('home') },
-    { view: ActiveView.Logs, Icon: DocumentChartBarIcon, label: t('logs') },
+    { view: ActiveView.Logs, Icon: ClipboardDocumentListIcon, label: t('logs') },
     { view: ActiveView.Nutrition, Icon: MagnifyingGlassIcon, label: t('nutrition') },
     { view: ActiveView.Recipes, Icon: BookOpenIcon, label: t('recipes') },
-    { view: ActiveView.Learn, Icon: LightBulbIcon, label: t('learn') },
+    { view: ActiveView.Learn, Icon: AcademicCapIcon, label: t('learn') },
   ];
 
   return (
