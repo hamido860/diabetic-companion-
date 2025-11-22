@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A trusted, delightful diabetic companion that goes beyond logging — it predicts, coaches, and protects users. It provides actionable, personalized glucose insights, an AI coach, and accurate nutrition data." />
-    <meta name="theme-color" content="#3C312B" />
+    <meta name="theme-color" content="#1c1917" />
     <link rel="manifest" href="/manifest.json" />
     <title>Diabetic Companion</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,8 +15,8 @@
     <style>
       body {
         font-family: 'Inter', sans-serif;
-        background-color: #3C312B;
-        color: #D7C3A5;
+        background-color: #1c1917;
+        color: #d6d3d1;
       }
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Poppins', sans-serif;
@@ -87,11 +87,20 @@
         theme: {
           extend: {
             colors: {
+              // Legacy Mapped to New Palette (Warm Dark / Stone)
               'brand-yellow': '#F7B22C',
-              'brand-dark': '#3C312B',
-              'brand-olive': '#403E2D',
-              'brand-beige': '#D7C3A5',
-              'brand-offwhite': '#F3F4F6',
+              'brand-dark': '#1c1917', // Stone 950
+              'brand-olive': '#292524', // Stone 800
+              'brand-beige': '#d6d3d1', // Stone 300
+              'brand-offwhite': '#fafaf9', // Stone 50
+
+              // New Semantic
+              'brand-background': '#1c1917',
+              'brand-surface': '#292524',
+              'brand-surface-highlight': '#44403c',
+              'brand-primary': '#F7B22C',
+              'brand-text': '#fafaf9',
+              'brand-text-muted': '#a8a29e', // Stone 400
             }
           }
         }
