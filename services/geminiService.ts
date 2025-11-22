@@ -9,7 +9,7 @@ if (process.env.API_KEY) {
 
 const checkApiKey = () => {
     if (!ai) {
-        throw new Error("API Key is not configured. Please set the API_KEY environment variable to use this feature.");
+        throw new Error("Gemini API Key is missing. Please set GEMINI_API_KEY in .env.local or .env file.");
     }
 };
 
