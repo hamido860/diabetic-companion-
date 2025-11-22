@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { analyzeMealImage } from '../services/geminiService';
 import { NutritionInfo } from '../types';
-import { ArrowUpOnSquareIcon, CheckIcon, CubeIcon, SteakIcon, DropletIcon, FireIcon } from './icons/Icons';
+import { ArrowUpOnSquareIcon, CheckIcon, CubeIcon, SteakIcon, DropletIcon, FireIcon, CameraIcon, ShutterIcon, ArrowPathIcon, XMarkIcon } from './icons/Icons';
 import { useLocalization } from '../contexts/LocalizationContext';
 import { addLoggedItem } from '../services/logService';
-
 
 const MealScanner: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -14,8 +13,83 @@ const MealScanner: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLogged, setIsLogged] = useState(false);
 
+  // Camera State
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLocalization();
+
+  // Camera Logic
+  useEffect(() => {
+    let stream: MediaStream | null = null;
+
+    const startCamera = async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: facingMode,
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                }
+            });
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
+            setError(null);
+        } catch (err) {
+            console.error("Camera access denied:", err);
+            setError(t('cameraPermissionDenied'));
+            setIsCameraActive(false);
+        }
+    };
+
+    if (isCameraActive) {
+        startCamera();
+    }
+
+    return () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        if (videoRef.current && videoRef.current.srcObject) {
+             const currentStream = videoRef.current.srcObject as MediaStream;
+             currentStream.getTracks().forEach(track => track.stop());
+        }
+    };
+  }, [isCameraActive, facingMode, t]);
+
+  const handleTakePhoto = () => {
+      if (videoRef.current && canvasRef.current) {
+          const video = videoRef.current;
+          const canvas = canvasRef.current;
+
+          // Set canvas dimensions to match video
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              canvas.toBlob((blob) => {
+                  if (blob) {
+                      const file = new File([blob], "meal_scan.jpg", { type: "image/jpeg" });
+                      setImage(file);
+                      setPreview(URL.createObjectURL(file));
+                      setIsCameraActive(false);
+                      setNutritionInfo(null);
+                      setIsLogged(false);
+                  }
+              }, 'image/jpeg', 0.95);
+          }
+      }
+  };
+
+  const toggleCamera = () => {
+      setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -51,13 +125,13 @@ const MealScanner: React.FC = () => {
     setError(null);
     setIsLoading(false);
     setIsLogged(false);
+    setIsCameraActive(false);
     if (fileInputRef.current) {
         fileInputRef.current.value = "";
     }
   };
 
   const handleUploadClick = () => {
-      handleReset();
       fileInputRef.current?.click();
   }
   
@@ -169,12 +243,56 @@ const MealScanner: React.FC = () => {
     )
   };
 
+  // Full Screen Camera UI
+  if (isCameraActive) {
+      return (
+          <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-between p-4 animate-scaleIn">
+             <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="absolute inset-0 w-full h-full object-cover"
+             />
+
+             {/* Header */}
+             <div className="relative w-full flex justify-end z-10 pt-4 px-2">
+                <button onClick={() => setIsCameraActive(false)} className="p-3 bg-black/40 backdrop-blur-md rounded-full text-white hover:bg-black/60 transition-colors">
+                    <XMarkIcon className="w-8 h-8" />
+                </button>
+             </div>
+
+             {/* Controls */}
+             <div className="relative w-full max-w-md flex items-center justify-between z-10 pb-8 px-6">
+                 <button
+                    onClick={toggleCamera}
+                    className="p-4 bg-black/40 backdrop-blur-md rounded-full text-white hover:bg-black/60 transition-colors"
+                    aria-label={t('switchCamera')}
+                 >
+                     <ArrowPathIcon className="w-6 h-6" />
+                 </button>
+
+                 <button
+                    onClick={handleTakePhoto}
+                    className="transform active:scale-95 transition-transform"
+                    aria-label={t('takePhoto')}
+                 >
+                     <ShutterIcon className="w-20 h-20 text-white drop-shadow-lg" />
+                 </button>
+
+                 <div className="w-14" /> {/* Spacer for centering */}
+             </div>
+             <canvas ref={canvasRef} className="hidden" />
+          </div>
+      );
+  }
+
   return (
     <div className="space-y-4">
         <h1 className="text-4xl font-bold text-brand-offwhite">{t('mealScanner')}</h1>
         <p className="text-brand-beige opacity-80 text-md">{t('mealScannerDescription')}</p>
 
-        {error && !nutritionInfo && (
+        {error && !nutritionInfo && !isCameraActive && (
              <div className="bg-red-900/20 p-3 rounded-xl border border-red-800 text-center animate-fadeInUp">
                 <p className="text-sm text-red-400">{error}</p>
             </div>
@@ -190,7 +308,7 @@ const MealScanner: React.FC = () => {
             />
             {preview ? (
                 <div className="text-center">
-                    <img src={preview} alt="Meal preview" className="rounded-lg max-h-60 w-auto mx-auto mb-4" />
+                    <img src={preview} alt="Meal preview" className="rounded-lg max-h-80 w-auto mx-auto mb-4 object-cover shadow-md" />
                      <button
                         onClick={handleReset}
                         className="text-sm text-brand-yellow font-semibold hover:underline"
@@ -199,16 +317,23 @@ const MealScanner: React.FC = () => {
                     </button>
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-brand-beige/30 rounded-xl text-center space-y-4">
-                     <ArrowUpOnSquareIcon className="w-12 h-12 text-brand-beige/50 mb-2" />
-                    <h2 className="text-xl font-bold text-brand-offwhite">{t('uploadMealPhoto')}</h2>
-                    <p className="text-brand-beige/80 text-md">{t('uploadMealPhotoDescription')}</p>
-                    <button 
-                        onClick={handleUploadClick}
-                        className="w-full max-w-xs mt-4 bg-brand-yellow text-brand-dark font-bold py-3 px-4 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
-                    >
-                        {t('uploadFromGallery')}
-                    </button>
+                <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-brand-beige/30 rounded-xl text-center space-y-6">
+                    <div className="flex gap-4 w-full max-w-sm">
+                        <button
+                            onClick={() => setIsCameraActive(true)}
+                            className="flex-1 bg-brand-primary text-brand-background font-bold py-4 px-4 rounded-2xl shadow-lg shadow-brand-primary/20 hover:brightness-110 transition-all flex flex-col items-center gap-2"
+                        >
+                            <CameraIcon className="w-8 h-8" />
+                            <span>{t('takePhoto')}</span>
+                        </button>
+                        <button
+                            onClick={handleUploadClick}
+                            className="flex-1 bg-brand-surface-highlight text-brand-text font-bold py-4 px-4 rounded-2xl hover:bg-brand-surface-highlight/80 transition-all flex flex-col items-center gap-2 border border-white/5"
+                        >
+                            <ArrowUpOnSquareIcon className="w-8 h-8" />
+                            <span>{t('uploadFromGallery')}</span>
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
