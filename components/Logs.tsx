@@ -114,7 +114,7 @@ const Logs: React.FC = () => {
     ];
 
     const EmptyState = ({type}: {type?: LogType}) => (
-        <div className="text-center py-12 bg-brand-olive rounded-3xl shadow-lg shadow-black/20">
+        <div className="text-center py-12 bg-brand-olive rounded-md shadow-lg shadow-black/20">
             <CalendarDaysIcon className="w-12 h-12 mx-auto text-brand-beige/30 mb-3" />
             <h3 className="text-lg font-semibold text-brand-beige">{t('noReadingsFound')}</h3>
             <p className="text-sm text-brand-beige/60">
@@ -124,7 +124,7 @@ const Logs: React.FC = () => {
     );
 
     const GlucoseChart = () => (
-        <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 mb-4">
+        <div className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 mb-4">
             <div className="flex justify-between items-center mb-4">
                  <h3 className="text-lg font-bold text-brand-offwhite">{t('glucoseTrend')}</h3>
                  <div className="bg-brand-dark p-1 rounded-lg flex items-center gap-1">
@@ -228,7 +228,7 @@ const Logs: React.FC = () => {
 
         return (
             <div className="fixed inset-0 bg-black bg-opacity-60 z-[100] flex justify-center items-center p-4 animate-fadeInUp" aria-modal="true" role="dialog">
-                <div className="bg-brand-olive rounded-3xl shadow-xl w-full max-w-sm p-6 space-y-4 text-center animate-scaleIn">
+                <div className="bg-brand-olive rounded-md shadow-xl w-full max-w-sm p-6 space-y-4 text-center animate-scaleIn">
                     <h3 className="text-xl font-bold text-brand-offwhite">{t('deleteLogTitle')}</h3>
                     
                     <p className="text-sm text-brand-beige/80">{t('deleteLogMessage')}</p>

@@ -62,7 +62,7 @@ const NutritionModal: React.FC<{
           role="dialog"
         >
           <div 
-            className="bg-brand-olive rounded-3xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col"
+            className="bg-brand-olive rounded-md shadow-xl w-full max-w-md max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border-white/10 flex justify-between items-start">
@@ -161,7 +161,7 @@ const RecipeDetailView: React.FC<{ recipe: Recipe; onBack: () => void }> = ({ re
                     <ArrowLeftIcon className="w-6 h-6 text-brand-beige" />
                 </button>
             </header>
-            <div className="bg-brand-olive rounded-3xl shadow-xl w-full max-w-4xl mx-auto overflow-hidden">
+            <div className="bg-brand-olive rounded-md shadow-xl w-full max-w-4xl mx-auto overflow-hidden">
                 <img src={recipe.strMealThumb} alt={content.title} className="w-full h-64 object-cover" />
                 <div className="p-6 md:p-8">
                     {isTranslating ? (
@@ -227,7 +227,7 @@ const RecipeDetailView: React.FC<{ recipe: Recipe; onBack: () => void }> = ({ re
 };
   
 const RecipeCardSkeleton = () => (
-    <div className="bg-brand-olive rounded-3xl shadow-lg shadow-black/20 overflow-hidden animate-pulse">
+    <div className="bg-brand-olive rounded-md shadow-lg shadow-black/20 overflow-hidden animate-pulse">
         <div className="w-full h-28 bg-brand-dark"></div>
         <div className="p-3">
             <div className="h-4 bg-brand-dark rounded w-3/4 mb-2"></div>
@@ -367,7 +367,7 @@ const Recipes: React.FC = () => {
           Array.from({ length: 6 }).map((_, i) => <RecipeCardSkeleton key={i} />)
         ) : (
           recipes.map((recipe) => (
-            <button key={recipe.idMeal} onClick={() => handleSelectRecipe(recipe)} className="bg-brand-olive rounded-3xl shadow-lg shadow-black/20 overflow-hidden text-left transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-yellow relative">
+            <button key={recipe.idMeal} onClick={() => handleSelectRecipe(recipe)} className="bg-brand-olive rounded-md shadow-lg shadow-black/20 overflow-hidden text-left transition-transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-brand-yellow relative">
               <img src={recipe.strMealThumb} alt={recipe.strMeal} className="w-full h-28 object-cover" />
               <div className="p-3">
                 <h3 className="font-semibold text-sm text-brand-offwhite leading-tight">{recipe.strMeal}</h3>

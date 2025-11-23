@@ -30,7 +30,7 @@ const LogGlucoseModal: React.FC<LogGlucoseModalProps> = ({ onClose, onSave }) =>
           role="dialog"
         >
             <div 
-                className="bg-brand-olive rounded-3xl shadow-xl w-full max-w-sm p-6 space-y-4 animate-scaleIn"
+                className="bg-brand-olive rounded-md shadow-xl w-full max-w-sm p-6 space-y-4 animate-scaleIn"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-between items-center">

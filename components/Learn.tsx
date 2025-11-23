@@ -13,7 +13,7 @@ const Learn: React.FC = () => {
                 <p className="text-brand-beige/80 text-md">{t('diabetesGuideDescription')}</p>
             </header>
 
-            <div className="bg-brand-olive p-4 sm:p-6 rounded-3xl shadow-lg shadow-black/20">
+            <div className="bg-brand-olive p-4 sm:p-6 rounded-md shadow-lg shadow-black/20">
                 <Accordion>
                     <AccordionItem title={t('type1vs2Title')}>
                         <p>{t('type1vs2Intro')}</p>
