@@ -84,7 +84,7 @@ const PredictiveCard: React.FC = () => {
   return (
     <button 
       onClick={handleStartWalk}
-      className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 w-full text-start flex items-center justify-between transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-brand-yellow"
+      className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 w-full text-left flex items-center justify-between transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-brand-yellow"
       aria-label="Start a 15 minute walk to prevent a glucose spike"
     >
       <div className="flex items-center space-x-4">
@@ -94,13 +94,13 @@ const PredictiveCard: React.FC = () => {
           </svg>
         </div>
         <div>
-          <p className="font-semibold text-brand-offwhite">{t('mediumRiskSpike')}</p>
-          <p className="text-sm text-brand-beige/80">{t('predictedIn')}</p>
+          <p className="font-medium text-brand-offwhite text-sm">{t('spikeRiskMedium')}</p>
+          <p className="text-xs text-brand-beige/80">{t('inMinutes')}</p>
         </div>
       </div>
       <div className="flex flex-col items-center space-y-1 text-brand-yellow">
-          <WalkingIcon className="w-8 h-8" />
-          <span className="font-bold text-xs uppercase tracking-wider">{t('takeAWalk')}</span>
+          <WalkingIcon className="w-8 h-8 animate-walk" />
+          <span className="font-bold text-[10px] uppercase tracking-wider">{t('takeAWalk')}</span>
       </div>
     </button>
   );

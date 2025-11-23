@@ -75,11 +75,15 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
   return (
     <div className="space-y-6">
       <header className="flex justify-between items-center py-2">
-        <div>
-          <h1 className="text-3xl font-bold text-brand-offwhite tracking-tight mb-1">{greeting}</h1>
-          <p className="text-brand-beige opacity-80 text-sm font-medium">{t('summaryToday')}</p>
+        {/* Compact Banner Header */}
+        <div className="flex-1 bg-brand-olive/50 border border-brand-beige/10 rounded-lg p-3 flex items-center justify-between mr-3">
+            <div>
+              <h1 className="text-base font-semibold text-brand-offwhite tracking-tight leading-tight">{greeting}</h1>
+              <p className="text-brand-beige opacity-70 text-xs font-medium leading-tight">{t('summaryToday')}</p>
+            </div>
         </div>
-        <div className="flex items-center gap-3">
+
+        <div className="flex items-center gap-2">
           <button
             onClick={toggleLanguage}
             className="font-semibold text-xs w-9 h-9 flex items-center justify-center rounded-md bg-brand-olive hover:bg-brand-olive/80 text-brand-beige transition-colors shadow-sm border border-brand-beige/10"
