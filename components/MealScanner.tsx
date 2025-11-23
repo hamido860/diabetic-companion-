@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { analyzeMealImage } from '../services/geminiService';
 import { NutritionInfo } from '../types';
 import { ArrowUpOnSquareIcon, CheckIcon, CubeIcon, SteakIcon, DropletIcon, FireIcon } from './icons/Icons';
 import { useLocalization } from '../contexts/LocalizationContext';
 import { addLoggedItem } from '../services/logService';
-
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Capacitor } from '@capacitor/core';
 
 const MealScanner: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -13,9 +14,14 @@ const MealScanner: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLogged, setIsLogged] = useState(false);
+  const [isNative, setIsNative] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLocalization();
+
+  useEffect(() => {
+    setIsNative(Capacitor.isNativePlatform());
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -26,6 +32,12 @@ const MealScanner: React.FC = () => {
       setError(null);
       setIsLogged(false);
     }
+  };
+
+  const urlToFile = async (url: string, filename: string, mimeType: string): Promise<File> => {
+      const res = await fetch(url);
+      const buf = await res.arrayBuffer();
+      return new File([buf], filename, { type: mimeType });
   };
   
   const handleAnalyzeClick = async () => {
@@ -56,9 +68,33 @@ const MealScanner: React.FC = () => {
     }
   };
 
-  const handleUploadClick = () => {
+  const handleUploadClick = async () => {
       handleReset();
-      fileInputRef.current?.click();
+
+      if (isNative) {
+          try {
+              const photo = await Camera.getPhoto({
+                  quality: 90,
+                  allowEditing: false,
+                  resultType: CameraResultType.Uri,
+                  source: CameraSource.Prompt // Asks user: Camera or Photos
+              });
+
+              if (photo.webPath) {
+                  setPreview(photo.webPath);
+                  const file = await urlToFile(photo.webPath, `meal_${Date.now()}.${photo.format}`, `image/${photo.format}`);
+                  setImage(file);
+                  setNutritionInfo(null);
+                  setError(null);
+                  setIsLogged(false);
+              }
+          } catch (e) {
+              // User cancelled or error
+              console.log("Camera cancelled or failed", e);
+          }
+      } else {
+          fileInputRef.current?.click();
+      }
   }
   
   const NutritionResult: React.FC<{ info: NutritionInfo }> = ({ info }) => {
@@ -207,7 +243,7 @@ const MealScanner: React.FC = () => {
                         onClick={handleUploadClick}
                         className="w-full max-w-xs mt-4 bg-brand-yellow text-brand-dark font-bold py-3 px-4 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
                     >
-                        {t('uploadFromGallery')}
+                        {isNative ? t('takePhotoOrChoose') : t('uploadFromGallery')}
                     </button>
                 </div>
             )}
