@@ -20,23 +20,23 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, setActiveView }) => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-brand-olive z-50 rounded-t-[28px] shadow-[0_-5px_25px_rgba(0,0,0,0.1)]">
-      <div className="flex justify-around items-center h-24 max-w-lg mx-auto px-2">
+    <nav className="fixed bottom-0 left-0 right-0 bg-[#1E1E1E]/90 backdrop-blur-md border-t border-white/5 z-50 rounded-t-[28px] shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">
+      <div className="flex justify-around items-center h-20 max-w-lg mx-auto px-2">
         {navItems.map((item) => {
           const isActive = activeView === item.view;
           return (
             <button
               key={item.view}
               onClick={() => setActiveView(item.view)}
-              className={`flex flex-col items-center justify-center space-y-1 transition-colors w-16 ${
+              className={`flex flex-col items-center justify-center space-y-1 transition-all duration-300 w-16 ${
                   isActive 
-                  ? 'text-brand-yellow' 
-                  : 'text-brand-beige/60 hover:text-brand-yellow'
+                  ? 'text-brand-yellow -translate-y-2'
+                  : 'text-gray-500 hover:text-gray-300'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
-              <item.Icon className="w-7 h-7" />
-              <span className={`text-xs transition-all ${isActive ? 'font-bold' : 'font-medium'}`}>
+              <item.Icon className={`w-7 h-7 ${isActive ? 'drop-shadow-glow' : ''}`} />
+              <span className={`text-[10px] uppercase tracking-wider transition-all ${isActive ? 'font-bold opacity-100' : 'font-medium opacity-0'}`}>
                 {item.label}
               </span>
             </button>
