@@ -53,7 +53,7 @@ const PredictiveCard: React.FC = () => {
 
   if (walkState === 'walking') {
     return (
-      <div className="bg-brand-yellow p-6 rounded-3xl shadow-lg shadow-black/20 w-full text-brand-dark flex flex-col items-center justify-center animate-fadeInUp">
+      <div className="bg-brand-yellow p-6 rounded-md shadow-lg shadow-black/20 w-full text-brand-dark flex flex-col items-center justify-center animate-fadeInUp">
         <WalkingIcon className="w-16 h-16 animate-walk mb-2" />
         <p className="text-5xl font-bold tracking-tighter mb-1">{formatTime(timeLeft)}</p>
         <p className="text-md opacity-80 mb-4">{t('timeRemaining')}</p>
@@ -71,7 +71,7 @@ const PredictiveCard: React.FC = () => {
 
   if (walkState === 'completed') {
     return (
-      <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-3xl shadow-lg shadow-black/20 w-full text-white flex flex-col items-center justify-center animate-fadeInUp">
+      <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-md shadow-lg shadow-black/20 w-full text-white flex flex-col items-center justify-center animate-fadeInUp">
         <div className="animate-scaleIn flex flex-col items-center">
             <CheckIcon className="w-12 h-12 mb-2" />
             <p className="text-xl font-bold">{t('walkComplete')}</p>
@@ -84,11 +84,11 @@ const PredictiveCard: React.FC = () => {
   return (
     <button 
       onClick={handleStartWalk}
-      className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 w-full text-start flex items-center justify-between transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-brand-yellow"
+      className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 w-full text-start flex items-center justify-between transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-brand-yellow"
       aria-label="Start a 15 minute walk to prevent a glucose spike"
     >
       <div className="flex items-center space-x-4">
-        <div className="bg-orange-900/50 p-3.5 rounded-full">
+        <div className="bg-orange-900/50 p-3 rounded-full">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>

@@ -74,24 +74,24 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
 
   return (
     <div className="space-y-6">
-      <header className="flex justify-between items-start">
+      <header className="flex justify-between items-center py-2">
         <div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-brand-offwhite">{greeting}</h1>
-          <p className="text-brand-beige opacity-80 text-md sm:text-lg">{t('summaryToday')}</p>
+          <h1 className="text-3xl font-bold text-brand-offwhite tracking-tight mb-1">{greeting}</h1>
+          <p className="text-brand-beige opacity-80 text-sm font-medium">{t('summaryToday')}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={toggleLanguage}
-            className="font-semibold text-sm w-10 h-10 flex items-center justify-center rounded-full bg-brand-olive hover:bg-opacity-80 text-brand-beige transition-colors shadow-sm"
+            className="font-semibold text-xs w-9 h-9 flex items-center justify-center rounded-md bg-brand-olive hover:bg-brand-olive/80 text-brand-beige transition-colors shadow-sm border border-brand-beige/10"
           >
             {language.toUpperCase()}
           </button>
           <button
             onClick={() => setIsSettingsModalOpen(true)}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-brand-olive hover:bg-opacity-80 text-brand-beige transition-colors shadow-sm"
+            className="w-9 h-9 flex items-center justify-center rounded-md bg-brand-olive hover:bg-brand-olive/80 text-brand-beige transition-colors shadow-sm border border-brand-beige/10"
             aria-label={t('settings')}
           >
-            <Cog6ToothIcon className="w-5 h-5" />
+            <Cog6ToothIcon className="w-4 h-4" />
           </button>
         </div>
       </header>
@@ -104,8 +104,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
             timestamp={latestGlucose.timestamp}
           />
         ) : (
-          <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-center items-center text-center h-full">
-            <p className="text-brand-beige opacity-80">{t('logYourFirstGlucose')}</p>
+          <div className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 flex flex-col justify-center items-center text-center h-full min-h-[140px]">
+            <p className="text-brand-beige opacity-80 text-sm font-medium">{t('logYourFirstGlucose')}</p>
           </div>
         )}
         {latestWeight ? (
@@ -115,8 +115,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
             timestamp={latestWeight.timestamp}
           />
         ) : (
-            <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-center items-center text-center h-full">
-            <p className="text-brand-beige opacity-80">{t('logYourWeight')}</p>
+            <div className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 flex flex-col justify-center items-center text-center h-full min-h-[140px]">
+            <p className="text-brand-beige opacity-80 text-sm font-medium">{t('logYourWeight')}</p>
           </div>
         )}
       </div>

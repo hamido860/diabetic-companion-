@@ -57,7 +57,7 @@ const NutritionModal: React.FC<{ info: FoodNutritionInfo; onClose: () => void }>
           role="dialog"
         >
           <div 
-            className="bg-brand-olive rounded-3xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col"
+                className="bg-brand-olive rounded-md shadow-xl w-full max-w-md max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border-white/10 flex justify-between items-start">
@@ -138,7 +138,7 @@ const FoodCategory: React.FC<{
   onToggle: () => void;
 }> = ({ category, foods, onSelect, isOpen, onToggle }) => {
   return (
-    <div className="bg-brand-olive rounded-3xl shadow-lg shadow-black/20 overflow-hidden">
+    <div className="bg-brand-olive rounded-md shadow-lg shadow-black/20 overflow-hidden">
       <button
         onClick={onToggle}
         className="w-full flex justify-between items-center p-4 text-left"

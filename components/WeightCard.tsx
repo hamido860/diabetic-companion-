@@ -13,16 +13,18 @@ const WeightCard: React.FC<WeightCardProps> = ({ weight, unit, timestamp }) => {
   const { t } = useLocalization();
 
   return (
-    <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 flex flex-col justify-between h-full">
+    <div className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 flex flex-col justify-between h-full">
       <div>
-        <div className="flex items-center justify-between text-sm text-brand-beige/80 mb-1">
-          <span>{t('currentWeight')}</span>
-          <WeightScaleIcon className="w-5 h-5" />
+        <div className="flex items-center justify-between text-sm text-brand-beige/80 mb-2">
+          <span className="font-medium">{t('currentWeight')}</span>
+          <WeightScaleIcon className="w-5 h-5 opacity-80" />
         </div>
-        <p className="text-5xl font-bold tracking-tight text-brand-offwhite">{weight}</p>
-        <p className="text-sm text-brand-beige/80">{unit}</p>
+        <div className="flex items-baseline gap-1">
+          <p className="text-4xl font-bold tracking-tight text-brand-offwhite">{weight}</p>
+          <p className="text-sm text-brand-beige/80 font-medium">{unit}</p>
+        </div>
       </div>
-      <div className="mt-4">
+      <div className="mt-3 pt-3 border-t border-brand-beige/10">
         <p className="text-xs text-brand-beige/60">{formatTimestamp(timestamp)}</p>
       </div>
     </div>

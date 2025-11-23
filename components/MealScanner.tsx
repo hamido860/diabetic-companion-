@@ -166,7 +166,7 @@ const MealScanner: React.FC = () => {
     };
 
     return (
-      <div className="bg-brand-olive p-6 rounded-3xl shadow-lg shadow-black/20 animate-fadeInUp">
+      <div className="bg-brand-olive p-6 rounded-md shadow-lg shadow-black/20 animate-fadeInUp">
           <h3 className="text-2xl font-bold text-brand-offwhite mb-2">{editableInfo.recipeName}</h3>
           <p className="text-sm text-brand-beige mb-4">{t('confidence')} <span className={`font-semibold ${editableInfo.confidence === 'High' ? 'text-green-400' : editableInfo.confidence === 'Medium' ? 'text-yellow-400' : 'text-red-400'}`}>{editableInfo.confidence}</span></p>
           
@@ -216,7 +216,7 @@ const MealScanner: React.FC = () => {
             </div>
         )}
         
-        <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20">
+        <div className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20">
             <input
                 type="file"
                 accept="image/*"

@@ -63,7 +63,7 @@ const DailyIntakeTracker: React.FC = () => {
         return (
             <div>
                 <h2 className="text-xl font-bold text-brand-offwhite mb-3">{t('todaysIntake')}</h2>
-                <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 h-48 animate-pulse"></div>
+                <div className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 h-48 animate-pulse"></div>
             </div>
         );
     }
@@ -83,7 +83,7 @@ const DailyIntakeTracker: React.FC = () => {
                     </button>
                 )}
             </div>
-            <div className="bg-brand-olive p-4 rounded-3xl shadow-lg shadow-black/20 space-y-4">
+            <div className="bg-brand-olive p-4 rounded-md shadow-lg shadow-black/20 space-y-4">
                 <div className="space-y-3">
                     <NutrientProgress label={t('carbs')} value={totals.carbohydrates} goal={DAILY_GOALS.carbohydrates} Icon={CubeIcon} color="teal" />
                     <NutrientProgress label={t('protein')} value={totals.protein} goal={DAILY_GOALS.protein} Icon={SteakIcon} color="blue" />
