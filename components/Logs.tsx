@@ -16,9 +16,55 @@ import {
     ResponsiveContainer
 } from 'recharts';
 
-type FilterOption = 'week' | 'month' | 'all';
+type FilterOption = 'week' | 'month' | 'quarter' | 'all';
 type LogType = 'glucose' | 'weight';
 type ChartType = 'line' | 'scatter';
+
+const AnalysisStats: React.FC<{ logs: GlucoseLog[] }> = ({ logs }) => {
+    const { t } = useLocalization();
+
+    const stats = useMemo(() => {
+        if (logs.length === 0) return null;
+
+        const total = logs.reduce((sum, log) => sum + log.value, 0);
+        const avg = Math.round(total / logs.length);
+        const estA1C = ((avg + 46.7) / 28.7).toFixed(1);
+
+        const low = logs.filter(l => l.status === 'Low').length;
+        const high = logs.filter(l => l.status === 'High' || l.status === 'Slightly High').length;
+        const normal = logs.length - low - high;
+
+        return { avg, estA1C, low, high, normal, total: logs.length };
+    }, [logs]);
+
+    if (!stats) return null;
+
+    return (
+        <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="bg-brand-olive p-4 rounded-xl shadow-lg shadow-black/20">
+                <p className="text-sm text-brand-beige/60 mb-1">{t('averageGlucose') || 'Avg. Glucose'}</p>
+                <p className="text-2xl font-bold text-brand-offwhite">{stats.avg} <span className="text-sm font-normal">mg/dL</span></p>
+            </div>
+             <div className="bg-brand-olive p-4 rounded-xl shadow-lg shadow-black/20">
+                <p className="text-sm text-brand-beige/60 mb-1">{t('estimatedA1C') || 'Est. A1C'}</p>
+                <p className="text-2xl font-bold text-brand-offwhite">{stats.estA1C}%</p>
+            </div>
+             <div className="col-span-2 bg-brand-olive p-4 rounded-xl shadow-lg shadow-black/20">
+                <p className="text-sm text-brand-beige/60 mb-3">{t('distribution') || 'Distribution'}</p>
+                <div className="flex h-4 w-full rounded-full overflow-hidden">
+                    <div style={{ width: `${(stats.low / stats.total) * 100}%` }} className="bg-red-400" />
+                    <div style={{ width: `${(stats.normal / stats.total) * 100}%` }} className="bg-green-400" />
+                    <div style={{ width: `${(stats.high / stats.total) * 100}%` }} className="bg-yellow-400" />
+                </div>
+                <div className="flex justify-between mt-2 text-xs text-brand-beige/80">
+                    <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-red-400" /> Low ({Math.round((stats.low / stats.total) * 100)}%)</span>
+                    <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-green-400" /> Normal ({Math.round((stats.normal / stats.total) * 100)}%)</span>
+                    <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-yellow-400" /> High ({Math.round((stats.high / stats.total) * 100)}%)</span>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const Logs: React.FC = () => {
     const { t } = useLocalization();
@@ -57,7 +103,10 @@ const Logs: React.FC = () => {
         if (activeFilter === 'all') {
             return glucoseLogs;
         }
-        const daysToFilter = activeFilter === 'week' ? 7 : 30;
+
+        let daysToFilter = 7;
+        if (activeFilter === 'month') daysToFilter = 30;
+        if (activeFilter === 'quarter') daysToFilter = 90;
         
         const filterDateLimit = new Date(now.getTime());
         filterDateLimit.setDate(filterDateLimit.getDate() - daysToFilter);
@@ -79,7 +128,9 @@ const Logs: React.FC = () => {
         if (activeFilter === 'all') {
             return weightLogs;
         }
-        const daysToFilter = activeFilter === 'week' ? 7 : 30;
+        let daysToFilter = 7;
+        if (activeFilter === 'month') daysToFilter = 30;
+        if (activeFilter === 'quarter') daysToFilter = 90;
         
         const filterDateLimit = new Date(now.getTime());
         filterDateLimit.setDate(filterDateLimit.getDate() - daysToFilter);
@@ -108,9 +159,10 @@ const Logs: React.FC = () => {
     };
 
     const filterOptions: { key: FilterOption; label: string }[] = [
-        { key: 'week', label: 'Last 7 days' },
-        { key: 'month', label: 'Last 30 days' },
-        { key: 'all', label: 'All time' },
+        { key: 'week', label: '7 Days' },
+        { key: 'month', label: '30 Days' },
+        { key: 'quarter', label: '3 Months' },
+        { key: 'all', label: 'All' },
     ];
 
     const EmptyState = ({type}: {type?: LogType}) => (
@@ -311,12 +363,12 @@ const Logs: React.FC = () => {
                 </button>
             </div>
 
-            <div className="bg-brand-olive p-2 rounded-xl shadow-lg shadow-black/20 flex items-center justify-center gap-2">
+            <div className="bg-brand-olive p-2 rounded-xl shadow-lg shadow-black/20 flex items-center justify-center gap-2 overflow-x-auto">
                 {filterOptions.map(({ key, label }) => (
                     <button
                         key={key}
                         onClick={() => setActiveFilter(key)}
-                        className={`w-full text-center px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                        className={`min-w-[80px] text-center px-4 py-2 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap ${
                             activeFilter === key
                                 ? 'bg-brand-yellow text-brand-dark shadow'
                                 : 'text-brand-beige hover:bg-brand-dark/50'
@@ -327,7 +379,12 @@ const Logs: React.FC = () => {
                 ))}
             </div>
             
-            {activeLogType === 'glucose' && chartData.length > 0 && <GlucoseChart />}
+            {activeLogType === 'glucose' && chartData.length > 0 && (
+                <>
+                    <AnalysisStats logs={filteredGlucoseLogs} />
+                    <GlucoseChart />
+                </>
+            )}
 
             <div className="space-y-3">
                 {activeLogType === 'glucose' && (
