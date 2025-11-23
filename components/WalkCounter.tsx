@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocalization } from '../contexts/LocalizationContext';
 import { WalkingIcon, PencilIcon, XMarkIcon } from './icons/Icons';
-import { getTodaysSteps, addSteps } from '../services/logService';
+import { useStepTracker } from '../hooks/useStepTracker';
 
 const LogStepsModal: React.FC<{ onClose: () => void; onSave: (steps: number) => void; }> = ({ onClose, onSave }) => {
     const { t } = useLocalization();
@@ -72,22 +72,16 @@ const LogStepsModal: React.FC<{ onClose: () => void; onSave: (steps: number) => 
 
 const WalkCounter: React.FC = () => {
   const goal = 8000;
-  const [steps, setSteps] = useState(0);
+  const { steps, manualAddSteps, isNative } = useStepTracker();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useLocalization();
 
-  useEffect(() => {
-    setSteps(getTodaysSteps());
-  }, []);
-
   const handleSaveSteps = (stepsToAdd: number) => {
     try {
-        const newTotal = addSteps(stepsToAdd);
-        setSteps(newTotal);
+        manualAddSteps(stepsToAdd);
         setIsModalOpen(false);
     } catch (error) {
         console.error(error);
-        // Optionally show an error to the user
     }
   };
 
@@ -111,14 +105,21 @@ const WalkCounter: React.FC = () => {
               style={{ width: `${progress}%` }}
             ></div>
           </div>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="w-full flex items-center justify-center gap-2 text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors bg-brand-dark/50 hover:bg-brand-dark text-brand-yellow"
-            aria-label={t('logSteps')}
-          >
-            <PencilIcon className="w-4 h-4" />
-            <span>{t('logSteps')}</span>
-          </button>
+          {!isNative && (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="w-full flex items-center justify-center gap-2 text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors bg-brand-dark/50 hover:bg-brand-dark text-brand-yellow"
+                aria-label={t('logSteps')}
+              >
+                <PencilIcon className="w-4 h-4" />
+                <span>{t('logSteps')}</span>
+              </button>
+          )}
+          {isNative && (
+             <p className="text-xs text-center text-brand-beige/50">
+                 {t('autoTrackingActive') || "Auto-tracking active"}
+             </p>
+          )}
         </div>
       </div>
       {isModalOpen && <LogStepsModal onClose={() => setIsModalOpen(false)} onSave={handleSaveSteps} />}
