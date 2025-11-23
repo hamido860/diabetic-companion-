@@ -1,53 +1,63 @@
 import { GlucoseLog, GlucoseStatus, WeightLog } from '../types';
 
-function getRandomStatus(value: number): GlucoseStatus {
-  if (value < 70) return 'Low';
-  if (value >= 70 && value <= 125) return 'Normal';
-  if (value > 125 && value <= 180) return 'Slightly High';
-  return 'High';
-}
-
-function generateMockLogs(): GlucoseLog[] {
-  const logs: GlucoseLog[] = [];
-  const now = new Date();
-
-  for (let i = 0; i < 50; i++) {
-    const timestamp = new Date(now.getTime() - i * 6 * 60 * 60 * 1000); // 6 hours apart
-    const value = Math.floor(Math.random() * (220 - 60 + 1)) + 60; // Random value between 60 and 220
-    const status = getRandomStatus(value);
+const generateMockData = (): { glucoseLogs: GlucoseLog[], weightLogs: WeightLog[] } => {
+    const glucoseLogs: GlucoseLog[] = [];
+    const weightLogs: WeightLog[] = [];
+    const now = new Date();
     
-    logs.push({
-      id: `log-${i}`,
-      value,
-      timestamp: timestamp.toISOString(),
-      status,
-    });
-  }
+    // Generate data for the last 90 days
+    for (let i = 0; i < 90; i++) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
 
-  return logs;
-}
+        // 2-4 readings per day
+        const readingsCount = Math.floor(Math.random() * 3) + 2;
 
-export const mockGlucoseLogs: GlucoseLog[] = generateMockLogs();
+        for (let j = 0; j < readingsCount; j++) {
+            // Random time between 8am and 10pm
+            date.setHours(8 + Math.floor(Math.random() * 14), Math.floor(Math.random() * 60));
 
-function generateMockWeightLogs(): WeightLog[] {
-  const logs: WeightLog[] = [];
-  const now = new Date();
-  let currentWeight = 85; // Starting weight in kg
+            // Random glucose value with some trends
+            // Base value oscillates slightly over the month
+            const baseValue = 110 + Math.sin(i / 10) * 10;
+            const randomVariation = Math.floor(Math.random() * 60) - 20; // -20 to +40
+            const value = Math.floor(baseValue + randomVariation);
 
-  for (let i = 0; i < 20; i++) {
-    const timestamp = new Date(now.getTime() - i * 7 * 24 * 60 * 60 * 1000); // 1 week apart
-    const value = parseFloat((currentWeight - Math.random() * 0.5).toFixed(1)); // small decrease
-    currentWeight = value;
+            let status: GlucoseStatus = 'Normal';
+            if (value < 70) status = 'Low';
+            else if (value > 180) status = 'High';
+            else if (value > 125) status = 'Slightly High';
 
-    logs.push({
-      id: `weight-${i}`,
-      value,
-      unit: 'kg',
-      timestamp: timestamp.toISOString(),
-    });
-  }
+            glucoseLogs.push({
+                id: `g-${date.getTime()}-${j}`,
+                value,
+                timestamp: date.toISOString(),
+                status
+            });
+        }
 
-  return logs;
-}
+        // Weight logs: 1 every few days
+        if (i % 5 === 0) {
+            const weightDate = new Date(now);
+            weightDate.setDate(weightDate.getDate() - i);
+            weightDate.setHours(8, 0);
 
-export const mockWeightLogs: WeightLog[] = generateMockWeightLogs();
+             // Start at 80kg and lose/gain slowly
+             const weightValue = 80 - (i * 0.05) + (Math.random() * 0.5);
+
+             weightLogs.push({
+                 id: `w-${weightDate.getTime()}`,
+                 value: parseFloat(weightValue.toFixed(1)),
+                 unit: 'kg',
+                 timestamp: weightDate.toISOString()
+             });
+        }
+    }
+
+    return { glucoseLogs, weightLogs };
+};
+
+const { glucoseLogs, weightLogs } = generateMockData();
+
+export const mockGlucoseLogs = glucoseLogs;
+export const mockWeightLogs = weightLogs;

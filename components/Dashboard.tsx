@@ -5,11 +5,12 @@ import PredictiveCard from './PredictiveCard';
 import WalkCounter from './WalkCounter';
 import WeightCard from './WeightCard';
 import DailyIntakeTracker from './DailyIntakeTracker';
-import { CameraIcon, PlusIcon, WeightScaleIcon, Cog6ToothIcon, XMarkIcon } from './icons/Icons';
+import { CameraIcon, PlusIcon, WeightScaleIcon, Cog6ToothIcon, XMarkIcon, BellIcon } from './icons/Icons';
 import { useLocalization } from '../contexts/LocalizationContext';
 import LogGlucoseModal from './LogGlucoseModal';
 import LogWeightModal from './LogWeightModal';
 import SettingsModal from './SettingsModal';
+import RemindersModal from './RemindersModal';
 import { getGlucoseLogs, addGlucoseLog, getWeightLogs, addWeightLog } from '../services/logService';
 
 interface DashboardProps {
@@ -23,6 +24,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
   const [isWeightModalOpen, setIsWeightModalOpen] = useState(false);
   const [latestWeight, setLatestWeight] = useState<WeightLog | null>(null);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isRemindersModalOpen, setIsRemindersModalOpen] = useState(false);
   const [greeting, setGreeting] = useState('');
   const [isFabOpen, setIsFabOpen] = useState(false);
 
@@ -89,6 +91,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
             className="font-semibold text-xs w-9 h-9 flex items-center justify-center rounded-md bg-brand-olive hover:bg-brand-olive/80 text-brand-beige transition-colors shadow-sm border border-brand-beige/10"
           >
             {language.toUpperCase()}
+          </button>
+          <button
+            onClick={() => setIsRemindersModalOpen(true)}
+            className="w-9 h-9 flex items-center justify-center rounded-md bg-brand-olive hover:bg-brand-olive/80 text-brand-beige transition-colors shadow-sm border border-brand-beige/10"
+            aria-label="Reminders"
+          >
+            <BellIcon className="w-4 h-4" />
           </button>
           <button
             onClick={() => setIsSettingsModalOpen(true)}
@@ -183,6 +192,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onQuickAction }) => {
       {isLogModalOpen && <LogGlucoseModal onClose={() => setIsLogModalOpen(false)} onSave={handleSaveGlucose} />}
       {isWeightModalOpen && <LogWeightModal onClose={() => setIsWeightModalOpen(false)} onSave={handleSaveWeight} />}
       {isSettingsModalOpen && <SettingsModal onClose={() => setIsSettingsModalOpen(false)} />}
+      {isRemindersModalOpen && <RemindersModal onClose={() => setIsRemindersModalOpen(false)} />}
     </div>
   );
 };
