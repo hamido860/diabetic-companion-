@@ -68,33 +68,33 @@ const MealScanner: React.FC = () => {
     }
   };
 
-  const handleUploadClick = async () => {
+  const handleCameraAction = async (source: CameraSource) => {
       handleReset();
+      try {
+          const photo = await Camera.getPhoto({
+              quality: 90,
+              allowEditing: false,
+              resultType: CameraResultType.Uri,
+              source: source
+          });
 
-      if (isNative) {
-          try {
-              const photo = await Camera.getPhoto({
-                  quality: 90,
-                  allowEditing: false,
-                  resultType: CameraResultType.Uri,
-                  source: CameraSource.Prompt // Asks user: Camera or Photos
-              });
-
-              if (photo.webPath) {
-                  setPreview(photo.webPath);
-                  const file = await urlToFile(photo.webPath, `meal_${Date.now()}.${photo.format}`, `image/${photo.format}`);
-                  setImage(file);
-                  setNutritionInfo(null);
-                  setError(null);
-                  setIsLogged(false);
-              }
-          } catch (e) {
-              // User cancelled or error
-              console.log("Camera cancelled or failed", e);
+          if (photo.webPath) {
+              setPreview(photo.webPath);
+              const file = await urlToFile(photo.webPath, `meal_${Date.now()}.${photo.format}`, `image/${photo.format}`);
+              setImage(file);
+              setNutritionInfo(null);
+              setError(null);
+              setIsLogged(false);
           }
-      } else {
-          fileInputRef.current?.click();
+      } catch (e) {
+          // User cancelled or error
+          console.log("Camera cancelled or failed", e);
       }
+  };
+
+  const handleUploadClick = () => {
+      handleReset();
+      fileInputRef.current?.click();
   }
   
   const NutritionResult: React.FC<{ info: NutritionInfo }> = ({ info }) => {
@@ -239,12 +239,33 @@ const MealScanner: React.FC = () => {
                      <ArrowUpOnSquareIcon className="w-12 h-12 text-brand-beige/50 mb-2" />
                     <h2 className="text-xl font-bold text-brand-offwhite">{t('uploadMealPhoto')}</h2>
                     <p className="text-brand-beige/80 text-md">{t('uploadMealPhotoDescription')}</p>
-                    <button 
-                        onClick={handleUploadClick}
-                        className="w-full max-w-xs mt-4 bg-brand-yellow text-brand-dark font-bold py-3 px-4 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
-                    >
-                        {isNative ? t('takePhotoOrChoose') : t('uploadFromGallery')}
-                    </button>
+                    {isNative ? (
+                        <div className="w-full max-w-xs mt-4 flex flex-col gap-3">
+                             <button
+                                onClick={() => handleCameraAction(CameraSource.Camera)}
+                                className="w-full bg-brand-yellow text-brand-dark font-bold py-3 px-4 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                                </svg>
+                                {t('takePhoto')}
+                            </button>
+                             <button
+                                onClick={() => handleCameraAction(CameraSource.Photos)}
+                                className="w-full bg-brand-dark text-brand-beige font-semibold py-3 px-4 rounded-lg border border-brand-beige/20 hover:bg-brand-beige/10 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <ArrowUpOnSquareIcon className="h-5 w-5" />
+                                {t('uploadFromGallery')}
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={handleUploadClick}
+                            className="w-full max-w-xs mt-4 bg-brand-yellow text-brand-dark font-bold py-3 px-4 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
+                        >
+                            {t('uploadFromGallery')}
+                        </button>
+                    )}
                 </div>
             )}
         </div>
