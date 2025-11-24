@@ -166,47 +166,7 @@ const MealScanner: React.FC = () => {
     };
 
     return (
-      <div className="bg-brand-olive p-6 rounded-md shadow-lg shadow-black/20 animate-fadeInUp">
-          <h3 className="text-2xl font-bold text-brand-offwhite mb-2">{editableInfo.recipeName}</h3>
-          <p className="text-sm text-brand-beige mb-4">{t('confidence')} <span className={`font-semibold ${editableInfo.confidence === 'High' ? 'text-green-400' : editableInfo.confidence === 'Medium' ? 'text-yellow-400' : 'text-red-400'}`}>{editableInfo.confidence}</span></p>
-          
-          <div className="space-y-3 mb-6">
-            <EditableField label={t('carbs')} value={editableInfo.carbohydrates} Icon={CubeIcon} color="teal" field="carbohydrates" unit="g" />
-            <EditableField label={t('protein')} value={editableInfo.protein} Icon={SteakIcon} color="blue" field="protein" unit="g" />
-            <EditableField label={t('fats')} value={editableInfo.fats} Icon={DropletIcon} color="yellow" field="fats" unit="g" />
-            <EditableField label={t('calories')} value={editableInfo.calories} Icon={FireIcon} color="orange" field="calories" unit="kcal" />
-          </div>
-          
-          {error && <p className="text-sm text-red-400 text-center mt-4">{error}</p>}
-  
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 mt-2 border-t border-white/10">
-              <button
-                  onClick={handleLogMeal}
-                  disabled={isLogged}
-                  className="w-full bg-brand-yellow text-brand-dark font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors disabled:bg-brand-yellow/50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                  {isLogged ? (
-                      <>
-                          <CheckIcon className="w-5 h-5" />
-                          <span>{t('logged')}</span>
-                      </>
-                  ) : (
-                      t('logMeal')
-                  )}
-              </button>
-              <button
-                  onClick={handleReset}
-                  className="w-full bg-brand-dark text-brand-beige font-semibold py-3 px-4 rounded-lg hover:bg-opacity-80 transition-colors"
-              >
-                  {t('scanAnother')}
-              </button>
-          </div>
-      </div>
-    )
-  };
-
-  return (
-    <div className="space-y-4">
+      <div className="space-y-4">
         <h1 className="text-4xl font-bold text-brand-offwhite">{t('mealScanner')}</h1>
         <p className="text-brand-beige opacity-80 text-md">{t('mealScannerDescription')}</p>
 
