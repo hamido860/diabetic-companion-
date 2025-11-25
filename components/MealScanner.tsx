@@ -77,7 +77,7 @@ const MealScanner: React.FC = () => {
                   quality: 90,
                   allowEditing: false,
                   resultType: CameraResultType.Uri,
-                  source: CameraSource.Prompt // Asks user: Camera or Photos
+                  source: CameraSource.Photos
               });
 
               if (photo.webPath) {
@@ -243,7 +243,7 @@ const MealScanner: React.FC = () => {
                         onClick={handleUploadClick}
                         className="w-full max-w-xs mt-4 bg-brand-yellow text-brand-dark font-bold py-3 px-4 rounded-lg shadow-sm hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
                     >
-                        {isNative ? t('takePhotoOrChoose') : t('uploadFromGallery')}
+                        {t('uploadFromGallery')}
                     </button>
                 </div>
             )}
